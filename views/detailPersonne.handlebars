@@ -1,0 +1,47 @@
+{{> enTete}}
+{{> menu}}
+
+{{#if personne.dep_nom}}
+	<h1>Détail sur l'étudiant {{personne.per_nom}}</h1>
+	<table>
+		<tr>
+			<td>Prénom</td>
+			<td>Mail</td>
+			<td>Tel</td>
+			<td>Département</td>
+			<td>Ville</td>
+		</tr>
+		<tr>
+			<td>{{personne.per_prenom}}</td>
+			<td>{{personne.per_mail}}</td>
+			<td>{{personne.per_tel}}</td>
+			<td>{{personne.dep_nom}}</td>
+			<td>{{personne.vil_nom}}</td>
+		</tr>
+	</table>
+
+{{/if}}
+
+
+{{#if personne.fon_libelle}}
+	<h1>Détail sur le salarié {{personne.per_nom}}</h1>
+	<table>
+		<tr>
+			<td>Prénom</td>
+			<td>Mail</td>
+			<td>Tel</td>
+			<td>Tel pro</td>
+			<td>Fonction</td>
+		</tr>
+		<tr>
+			<td>{{personne.per_prenom}}</td>
+			<td>{{personne.per_mail}}</td>
+			<td>{{personne.per_tel}}</td>
+			<td>{{personne.sal_telprof}}</td>
+			<td>{{personne.fon_libelle}}</td>
+		</tr>
+	</table>
+
+{{/if}}
+
+<a href='/listerPersonne'><input type='button' value='Retour'/></a>
