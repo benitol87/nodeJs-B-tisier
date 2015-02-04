@@ -1,0 +1,36 @@
+<!-- 
+* Celle vue permet d'afficher l'intégralité des Villes 
+* la méthode ListerVille du controleur : villeControleur.js
+* lui passe listeVille et nbVille .
+* listeVille contient par exemple :
+* [ 
+* { vil_num: 5, vil_nom: 'Tulle' },
+* { vil_num: 6, vil_nom: 'Brive' },
+* { vil_num: 17, vil_nom: 'Orléans' }
+*  ]
+*
+* nbVille contient par exemple : 3
+* title est passé à main.handlebars
+* il sera inclus dans cette balise : <title> {{title}}</title>
+-->
+
+
+
+{{> enTete}} <!--   inclusion des vues partielles  -->
+{{> menu}} <!--   c'est le code HTML qui se répéte pour chaque page  -->
+<!--   mais, il peut lui aussi contenir du code handlebars (tests par exemple)  -->
+
+ <h1>Liste des villes enregistrées</h1>
+<p>Il y a actuellement {{nbVille}} villes enregistrées</p>
+
+<table>
+     <tr>
+       <th>Numéro</th>
+       <th>Nom</th>
+     </tr>                               
+ {{#each listeVille}} <!--  parcours de listeVille -->
+    <tr><td>{{this.vil_num}}</td><td>{{this.vil_nom}}</td></tr>
+ {{/each}}
+ </table>
+            
+ 
