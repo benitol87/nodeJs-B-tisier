@@ -28,7 +28,6 @@ module.exports.Connect = function(request, response){
 	}
 
 	response.session = request.session;
-	console.log(request.session);
 	
 	// Renvoi vers la page
 	response.render('connect', response);
@@ -38,7 +37,7 @@ module.exports.Connect = function(request, response){
 module.exports.Deconnect = function(request, response){
 	response.title = "Déconnexion";
 	request.session.login = ''; 
-	response.redirect('/connect');
+	response.render('disconnect');
 };
 
 

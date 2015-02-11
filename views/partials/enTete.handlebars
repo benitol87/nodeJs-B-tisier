@@ -1,11 +1,15 @@
 <div id="header">
 		<div id="connect">
-
-						Utilisateur : <b>Bob  </b><a href="/deconnect">Déconnexion</a>		</div>	
-					<div id="entete">
-					<div id="logo">
-						<img src="/image/smile.jpg" id= "imLogo" alt="Logo bêtisier IUT" title="Logo bêtisier IUT Limousin" />
-					</div>
+			{{#if session.login}}
+			Utilisateur : <b>{{session.login}}</b> <a href="/deconnect">Déconnexion</a>
+			{{else}}
+			<a href="/connect">Connexion</a>
+			{{/if}}
+		</div>
+		<div id="entete">
+		<div id="logo">
+			<img src="/image/smile.jpg" id= "imLogo" alt="Logo bêtisier IUT" title="Logo bêtisier IUT Limousin" />
+		</div>
 			
 		
 			
