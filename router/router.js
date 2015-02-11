@@ -17,9 +17,10 @@ module.exports = function(app){
     app.get('/citations/rechercher', CitationController.RechercherCitation);
 
  // villes
-   app.get('/listerVille', VilleController.ListerVille);
-   app.get('/ajouterVille', VilleController.AjouterVille);
-   app.get('/modifierVille', VilleController.ModifierVille);
+   app.get('/villes/lister', VilleController.ListerVille);
+   app.get('/villes/ajouter', VilleController.AjouterVille);
+   app.post('/villes/ajouter', VilleController.AjouterVille);
+   app.get('/villes/modifier', VilleController.ModifierVille);
 
 // connection
    app.get('/connect', ConnectController.Connect);

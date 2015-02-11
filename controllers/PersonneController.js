@@ -1,8 +1,8 @@
 
 var model = require('../models/personne.js');
-  
-	
-// ////////////////////////////////////////////// L I S T E R     P E R S O N N E S 
+
+
+// ////////////////////////////////////////////// L I S T E R     P E R S O N N E S
 module.exports.ListerPersonne = function(request, response){
 	response.title = 'Liste des personnes';
 
@@ -12,13 +12,13 @@ module.exports.ListerPersonne = function(request, response){
 				console.log(err);
 				return;
 		}
-		response.listePersonne = result; 
+		response.listePersonne = result;
 		response.nbPersonne = result.length;
 		response.render('listerPersonne', response);
-	}); 
-};   
+	});
+};
 
-// ////////////////////////////////////////////// D E T A I L S     P E R S O N N E  
+// ////////////////////////////////////////////// D E T A I L S     P E R S O N N E
 module.exports.DetailPersonne = function(request, response){
    response.title = 'Détail d\'une personne';
    var num = request.params.num;
@@ -28,14 +28,19 @@ module.exports.DetailPersonne = function(request, response){
 				console.log(err);
 				return;
 		}
-		response.personne = result[0]; 
+		response.personne = result[0];
 		response.render('detailPersonne', response);
-	}); 
-}; 
+	});
+};
 
-// ////////////////////////////////////////////// A J O U T E R     P E R S O N N E S   
+// ////////////////////////////////////////////// A J O U T E R     P E R S O N N E S
 module.exports.AjouterPersonne = function(request, response){
+	if (!request.session.num || !request.session.login) {
+		console.log("vous n'êtes pas connecté");
+		home_controller.Index(request, response);
+		return;
+	}
    response.title = 'Ajout des personnes';
 
-   response.render('ajouterPersonne', response);  
-}; 
+   response.render('ajouterPersonne', response);
+};

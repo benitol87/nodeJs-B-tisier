@@ -1,5 +1,6 @@
 var model_citation = require('../models/citation.js');
 var model_personne = require('../models/personne.js');
+var home_controller = require('./HomeController.js');
 
 var view_root = "citations/";
 
@@ -24,9 +25,14 @@ module.exports.ListerCitation = 	function(request, response){
 // ////////////////////////////////////////////// A J O U T E R     C I T A T I O N
 
 module.exports.AjouterCitation = 	function(request, response){
+	if (!request.session.num || !request.session.login) {
+		console.log("vous n'êtes pas connecté");
+		home_controller.Index(request, response);
+		return;
+	}
 	if (request.method == "POST") {
 		data = request.body;
-		data["per_num_etu"] = 3;
+		data["per_num_etu"] = request.session.num;
 		model_citation.addCitation(data, function (err, result) {
 			if (err) {
 				console.log(err);
@@ -67,7 +73,5 @@ module.exports.AjouterCitation = 	function(request, response){
 module.exports.RechercherCitation = function(request, response){
 	 response.title = 'Rechercher des citations';
 	 response.render(view_root + 'rechercher', response);
-
-
 	} ;
 

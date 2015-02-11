@@ -1,0 +1,37 @@
+{{> enTete}}
+{{> menu}}
+<h1>{{title}}</h1>
+
+
+{{#if personnes}}
+<form method="post" action="#">
+    <label for="personne">Blagueur :</label>
+    <select id="personne" name="per_num">
+        <optgroup label="Personnes">
+            {{#each personnes}}
+                <option value="{{this.per_num}}">{{this.per_nom}} {{this.per_prenom}}</option>
+            {{else}}
+                <p><i>No content</i></p>
+            {{/each}}
+        </optgroup>
+    </select>
+
+    <label for="date">Date citation :</label>
+    <input type="text" maxlength="10" name="cit_date" id="date" required>
+
+    <label for="citation">Citation :</label>
+    <textarea id="citation" name="cit_libelle" rows="3" cols="30" required></textarea>
+
+    <button type="submit">Valider</button>
+</form>
+{{/if}}
+
+
+{{#if cit_libelle}}
+<p>Résumé de la citation : </p>
+<ul>
+    <li><u>publiée par :</u> {{personne.per_nom}} {{personne.per_prenom}}</li>
+    <li><u>le :</u> {{cit_date}}</li>
+    <li><u>contenu :</u> {{cit_libelle}}</li>
+</ul>
+{{/if}}
