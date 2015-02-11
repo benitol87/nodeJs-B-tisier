@@ -11,9 +11,10 @@ module.exports = function(app){
     app.get('/', HomeController.Index);
 
 // citations
-    app.get('/listerCitation', CitationController.ListerCitation);
-    app.get('/ajouterCitation', CitationController.AjouterCitation);
-    app.get('/rechercherCitation', CitationController.RechercherCitation);
+    app.get('/citations/lister', CitationController.ListerCitation);
+    app.get('/citations/ajouter', CitationController.AjouterCitation);
+    app.post('/citations/ajouter', CitationController.AjouterCitation);
+    app.get('/citations/rechercher', CitationController.RechercherCitation);
 
  // villes
    app.get('/listerVille', VilleController.ListerVille);
