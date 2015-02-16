@@ -43,8 +43,6 @@ module.exports.Connect = function(request, response){
     }], function(){
 		// Callback
 		response.session = request.session;
-		console.log(request.session.login);
-		console.log(request.body.login);
 		// Renvoi vers la page de redirection
 		if(request.session.login){
 			response.render('connected');
