@@ -14,6 +14,7 @@ module.exports.ListerPersonne = function(request, response){
 		}
 		response.listePersonne = result;
 		response.nbPersonne = result.length;
+		response.session = request.session;
 		response.render('listerPersonne', response);
 	});
 };
@@ -29,6 +30,7 @@ module.exports.DetailPersonne = function(request, response){
 				return;
 		}
 		response.personne = result[0];
+		response.session = request.session;
 		response.render('detailPersonne', response);
 	});
 };
@@ -41,6 +43,6 @@ module.exports.AjouterPersonne = function(request, response){
 		return;
 	}
    response.title = 'Ajout des personnes';
-
+   response.session = request.session;
    response.render('ajouterPersonne', response);
 };

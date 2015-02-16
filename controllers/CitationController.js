@@ -17,6 +17,7 @@ module.exports.ListerCitation = 	function(request, response){
 		}
 		response.citations = result;
 		response.nbCitation = result.length;
+		response.session = request.session;
 		response.render(view_root + 'lister', response);
 	});
 
@@ -49,6 +50,7 @@ module.exports.AjouterCitation = 	function(request, response){
 					return;
 				};
 				response.personne = result[0];
+				response.session = request.session;
 				response.render(view_root + 'ajouter', response);
 			});
 		});
@@ -62,6 +64,7 @@ module.exports.AjouterCitation = 	function(request, response){
 				return;
 			};
 			response.personnes = result;
+			response.session = request.session;
 			response.render(view_root + 'ajouter', response);
 		});
 	}
@@ -72,6 +75,7 @@ module.exports.AjouterCitation = 	function(request, response){
 
 module.exports.RechercherCitation = function(request, response){
 	 response.title = 'Rechercher des citations';
+	 response.session = request.session;
 	 response.render(view_root + 'rechercher', response);
 	} ;
 
