@@ -37,6 +37,7 @@ module.exports.AjouterVille = function(request, response){
 
             response.title = "La ville a bien été ajoutée";
             response.session = request.session;
+            response.nomVille = request.body.vil_nom;
             response.render(view_root + 'ajouter', response);
         });
 

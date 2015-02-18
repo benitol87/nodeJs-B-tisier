@@ -1,7 +1,15 @@
 {{> enTete}}
 {{> menu}}
+
 <h1>Ajouter une ville</h1>
 
+{{#if nomVille}}
+
+<img src='/image/valid.png' />
+<span>La ville "<b>{{nomVille}}</b>" a été ajoutée.</span>
+
+
+{{else}}
 
 <form action="#" method="post">
     <label for="ville">Nom :</label>
@@ -9,3 +17,5 @@
 
     <button type="submit">Valider</button>
 </form>
+
+{{/if}}
