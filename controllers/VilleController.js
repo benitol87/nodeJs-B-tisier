@@ -14,7 +14,6 @@ module.exports.ListerVille = function(request, response){
         }
         response.listeVille = result;
         response.nbVille = result.length;
-        response.session = request.session;
         response.render(view_root + 'lister', response);
     });
 };
@@ -36,14 +35,12 @@ module.exports.AjouterVille = function(request, response){
             };
 
             response.title = "La ville a bien été ajoutée";
-            response.session = request.session;
             response.nomVille = request.body.vil_nom;
             response.render(view_root + 'ajouter', response);
         });
 
     } else {
        response.title = 'Ajouter des villes';
-       response.session = request.session;
        response.render(view_root + 'ajouter', response);
     }
 };
@@ -58,7 +55,6 @@ module.exports.ModifierVille = function(request, response){
     }
 
    response.title = 'Modifier une ville';
-   response.session = request.session;
    response.render(view_root + 'modifier', response);
 };
 

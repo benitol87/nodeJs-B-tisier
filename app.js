@@ -27,6 +27,13 @@ app.use(session({
     saveUninitialized: true
 }));
 
+/* ces lignes permettent d'utiliser directement les variables de session dans handlebars
+ UTILISATION : {{session.MaVariable}}  */
+app.use(function(request, response, next){
+       response.locals.session = request.session;
+       next();
+});
+
  
 /* express-handlebars - https://github.com/ericf/express-handlebars
 *  Handlebars : moteur de template pour Express.

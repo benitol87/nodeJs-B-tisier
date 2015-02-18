@@ -42,7 +42,6 @@ module.exports.Connect = function(request, response){
 		}
     }], function(){
 		// Callback
-		response.session = request.session;
 		// Renvoi vers la page de redirection
 		if(request.session.login){
 			response.render('connected');
@@ -60,7 +59,6 @@ module.exports.Connect = function(request, response){
 module.exports.Deconnect = function(request, response){
 	response.title = "Déconnexion";
 
-	response.session = request.session;
 	request.session.login = ''; 
 	response.render('disconnect');
 
