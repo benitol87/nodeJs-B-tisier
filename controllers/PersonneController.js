@@ -1,5 +1,7 @@
 
-var model = require('../models/personne.js');
+var model_personne = require('../models/personne.js');
+var model_etudiant = require('../models/etudiant.js');
+var model_salarie  = require('../models/salarie.js');
 var model_fonction = require('../models/fonction.js');
 var model_departement = require('../models/departement.js');
 var model_division = require('../models/division.js');
@@ -12,7 +14,7 @@ var home_controller = require('./HomeController.js');
 module.exports.ListerPersonne = function(request, response){
 	response.title = 'Liste des personnes';
 
-	model.getListePersonne( function (err, result) {
+	model_personne.getListePersonne( function (err, result) {
 		if (err) {
 				// gestion de l'erreur
 				console.log(err);
@@ -28,7 +30,7 @@ module.exports.ListerPersonne = function(request, response){
 module.exports.DetailPersonne = function(request, response){
    response.title = 'Détail d\'une personne';
    var num = request.params.num;
-   model.getDetailPersonne(num, function (err, result) {
+   model_personne.getDetailPersonne(num, function (err, result) {
 		if (err) {
 				// gestion de l'erreur
 				console.log(err);
@@ -53,12 +55,14 @@ module.exports.AjouterPersonne = function(request, response){
 		response.render('ajouterPersonne', response);
 	} else if(request.body.nom){
 		// Deuxième arrivée : redirection vers page formulaire étudiant ou salarié
-		request.session.nomAjout = request.body.nom;
-		request.session.prenomAjout = request.body.prenom;
-		request.session.telAjout = request.body.tel;
-		request.session.mailAjout = request.body.mail;
-		request.session.loginAjout = request.body.login;
-		request.session.passwordAjout = request.body.password;
+		request.session.donneesAjoutPersonne = {};
+		request.session.donneesAjoutPersonne.per_nom = request.body.nom;
+		request.session.donneesAjoutPersonne.per_prenom = request.body.prenom;
+		request.session.donneesAjoutPersonne.per_tel = request.body.tel;
+		request.session.donneesAjoutPersonne.per_mail = request.body.mail;
+		request.session.donneesAjoutPersonne.per_login = request.body.login;
+		request.session.donneesAjoutPersonne.per_pwd = request.body.password;
+		request.session.donneesAjoutPersonne.per_admin = 0;
 
 
 		if(request.body.categorie=="1"){
@@ -116,16 +120,59 @@ module.exports.AjouterPersonne = function(request, response){
 		}
 	} else if(request.body.annee){
 		// Troisième arrivée 1 : récupération des données de l'étudiant
-		// TODO : Ajouter étudiant
+		request.session.donneesAjoutPersonne.dep_num = request.body.dep;
+		request.session.donneesAjoutPersonne.div_num = request.body.annee;
 
-		response.title = 'Ajout d\'un étudiant';
-		response.render('ajouterEtudiant', response);
+		// TODO : Ajouter personne
+		model_personne.addPersonne(request.session.donneesAjoutPersonne, function (err, result) {
+            if (err) {
+                console.log(err);
+                return;
+            };
+
+			request.session.donneesAjoutPersonne.per_num = result.insertId;
+			
+			model_etudiant.addEtudiant(request.session.donneesAjoutPersonne, function (err, result) {
+	            if (err) {
+	                console.log(err);
+	                return;
+	            };
+
+				response.title = 'Ajout d\'un étudiant';
+				response.render('ajouterEtudiant', response);
+	        });
+
+        });
+
+
 	} else {
 		// Troisième arrivée 2 : récupération des données du salarié
-		// TODO : Ajouter salarié
 
-		response.title = 'Ajout d\'un salarié';
-		response.render('ajouterSalarie', response);
+		request.session.donneesAjoutPersonne.sal_telprof = request.body.telprof;
+		request.session.donneesAjoutPersonne.fon_num = request.body.fonction;
+
+		// TODO : Ajouter personne
+		model_personne.addPersonne(request.session.donneesAjoutPersonne, function (err, result) {
+            if (err) {
+                console.log(err);
+                return;
+            };
+
+			request.session.donneesAjoutPersonne.per_num = result.insertId;
+			
+			model_salarie.addSalarie(request.session.donneesAjoutPersonne, function (err, result) {
+	            if (err) {
+	                console.log(err);
+	                return;
+	            };
+	            
+				response.title = 'Ajout d\'un salarié';
+				response.render('ajouterSalarie', response);
+	        });
+
+        });
+
+
 	}
 	
 };

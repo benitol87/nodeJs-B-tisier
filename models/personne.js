@@ -34,7 +34,7 @@ module.exports.getDetailPersonne = function (per_num, callback) {
 * prénom de la personne
 */
 module.exports.getListePersonne = function (callback) {  
-	// connection à la base
+	// connexion à la base
 	db.getConnection(function(err, connexion){
 		if(!err){
 			var sql = 'SELECT per_num, per_nom, per_prenom FROM personne';
@@ -73,3 +73,31 @@ module.exports.getLoginOk = function (data, callback) {
 	});
 };
 
+
+module.exports.addPersonne = function (data, callback) {  
+	// cryptage en sha256
+	var sha256 = crypto.createHash("sha256"); 
+	sha256.update(data['per_pwd'], "utf8");
+	var pwd_crypte = sha256.digest("base64");
+
+	// connexion à la base
+	db.getConnection(function(err, connexion){
+		if(!err){
+			var sql = 'INSERT INTO personne (per_nom, per_prenom, per_tel, per_mail, per_admin, per_login, per_pwd) '+
+			' VALUES ('+connexion.escape(data['per_nom'])+
+			', '+connexion.escape(data['per_prenom'])+
+			', '+connexion.escape(data['per_tel'])+
+			', '+connexion.escape(data['per_mail'])+
+			', '+connexion.escape(data['per_admin'])+
+			', '+connexion.escape(data['per_login'])+
+			', '+connexion.escape(pwd_crypte)+
+			' );';
+			// s'il n'y a pas d'erreur de connexion
+			// execution de la requête SQL           
+			connexion.query(sql, callback);
+			
+			// la connexion retourne dans le pool
+			connexion.release();
+		 }
+	});   
+};

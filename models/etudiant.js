@@ -1,13 +1,13 @@
 var db = require('../configDb');
 
-module.exports.addSalarie = function (data, callback) {  
+module.exports.addEtudiant = function (data, callback) {  
 	// connexion à la base
 	db.getConnection(function(err, connexion){
 		if(!err){
-			var sql = 'INSERT INTO salarie (per_num, sal_telprof, fon_num) '+
+			var sql = 'INSERT INTO etudiant (per_num, dep_num, div_num) '+
 			' VALUES ('+connexion.escape(data['per_num'])+
-			', '+connexion.escape(data['sal_telprof'])+
-			', '+connexion.escape(data['fon_num'])+
+			', '+connexion.escape(data['dep_num'])+
+			', '+connexion.escape(data['div_num'])+
 			' );';
 			// s'il n'y a pas d'erreur de connexion
 			// execution de la requête SQL           
@@ -18,3 +18,4 @@ module.exports.addSalarie = function (data, callback) {
 		 }
 	});   
 };
+
