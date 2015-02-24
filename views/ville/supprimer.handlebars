@@ -1,0 +1,10 @@
+{{> enTete}}
+{{> menu}}
+
+<h1>Suppression de <b>{{ ville.vil_nom }}</b></h1>
+
+{{#if supprimer}}
+    <p>{{ ville.vil_nom }} a été supprimée.</p>
+{{else}}
+    <p>{{ ville.vil_nom }} n'a pas pu être supprimée : elle est liée à un ou plusieurs département(s).</p>
+{{/if}}

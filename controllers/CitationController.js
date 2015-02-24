@@ -2,14 +2,14 @@ var model_citation = require('../models/citation.js');
 var model_personne = require('../models/personne.js');
 var home_controller = require('./HomeController.js');
 
-var view_root = "citations/";
+var view_root = "citation/";
 
 // ////////////////////////////////////////////// L I S T E R     C I T A T I O N
 
-module.exports.ListerCitation = 	function(request, response){
+module.exports.citations = 	function(request, response){
 	response.title = 'Liste des personne';
 
-	model_citation.getListeCitation( function (err, result) {
+	model_citation.getCitations( function (err, result) {
 		if (err) {
 			// gestion de l'erreur
 			console.log(err);
@@ -17,16 +17,16 @@ module.exports.ListerCitation = 	function(request, response){
 		}
 		response.citations = result;
 		response.nbCitation = result.length;
-		response.render(view_root + 'lister', response);
+		response.render(view_root + 'citations', response);
 	});
 
 	} ;
 
 // ////////////////////////////////////////////// A J O U T E R     C I T A T I O N
 
-module.exports.AjouterCitation = 	function(request, response){
+module.exports.ajouter = 	function(request, response){
 	if (!request.session.num || !request.session.login) {
-		console.log("vous n'êtes pas connecté");
+        response.message = "Vous n'êtes pas connecté.";
 		home_controller.Index(request, response);
 		return;
 	}
@@ -68,9 +68,57 @@ module.exports.AjouterCitation = 	function(request, response){
 	} ;
 
 
+// ////////////////////////////////////////////// M O D I F I E R     C I T A T I O N
+
+module.exports.citation = function(request, response){
+    if (!request.session.num || !request.session.login) {
+        response.message = "Vous n'êtes pas connecté.";
+        home_controller.Index(request, response);
+        return;
+    }
+
+    if (request.method == "POST") {
+        model_citation.setCitation(request.body, function (err, result) {
+            if (err) {
+                console.log(err);
+                return;
+            };
+        });
+    }
+
+    var num = request.params.num;
+    model_citation.getCitation(num, function (err, result) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        response.title = 'Citation numéro ' + result[0].cit_num;
+        response.citation = result[0];
+
+		model_personne.getDetailPersonne(result[0].per_num, function (err, result) {
+			if (err) {
+				console.log(err);
+				return;
+			};
+			response.personne = result[0];
+
+	        model_personne.getListePersonne( function (err, result) {
+				if (err) {
+					console.log(err);
+					return;
+				};
+				response.personnes = result;
+	        	response.render(view_root + 'citation', response);
+			});
+		});
+    });
+};
+
+
+
 // ////////////////////////////////////////////// R E C H E R C H E R     C I T A T I O N
 
-module.exports.RechercherCitation = function(request, response){
+module.exports.rechercher = function(request, response){
 	 response.title = 'Rechercher des citations';
 	 response.render(view_root + 'rechercher', response);
 	} ;

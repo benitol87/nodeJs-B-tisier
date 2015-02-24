@@ -1,0 +1,38 @@
+{{> enTete}}
+{{> menu}}
+
+<div id="show">
+    <h1>Résumé de la ville</h1>
+
+    <p>Identifiant : <b>{{ ville.vil_num }}</b></p>
+    <p>Nom de la ville : <b>{{ ville.vil_nom }}</b></p>
+
+    <button id="modifier">Modifier la ville</button>
+    <a href="/ville/{{ ville.vil_num }}/supprimer">Supprimer la ville</button>
+</div>
+
+
+<div id="update">
+    <h1>Modification de la ville</h1>
+
+    <form action="#" method="post">
+        <input type="hidden" name="vil_num" value="{{ ville.vil_num }}">
+
+        <label for="ville">Nom :</label>
+        <input id="ville" type="text" name="vil_nom" maxlength="25" value="{{ ville.vil_nom }}">
+
+        <button type="submit">Valider</button>
+    </form>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#update').fadeToggle(0.5);
+    });
+
+    $('#modifier').on('click', function() {
+        $('#show').fadeToggle(0.5);
+        $('#update').fadeToggle(0.5);
+    });
+</script>
