@@ -1,0 +1,49 @@
+{{> enTete}}
+{{> menu}}
+
+<div id="show">
+    <h1>Résumé de la citation</h1>
+
+    <p>Publiée par : <b>{{ personne.per_nom }} {{ personne.per_prenom }}</b></p>
+    <p>Le : <b>{{ citation.cit_date }}</b></p>
+    <p>Contenu : <b>{{ citation.cit_libelle }}</b></p>
+
+    <button id="modifier">Modifier la citation</button>
+</div>
+
+<div id="update">
+    <h1>Modification de la citation</h1>
+
+    <form action="#" method="post">
+        <label for="personne">Blagueur :</label>
+        <select id="personne" name="per_num">
+            <optgroup label="Personnes">
+                {{#each personnes}}
+                    <option value="{{this.per_num}}">{{this.per_nom}} {{this.per_prenom}}</option>
+                {{else}}
+                    <p><i>No content</i></p>
+                {{/each}}
+            </optgroup>
+        </select>
+
+        <label for="date">Date citation :</label>
+        <input type="text" maxlength="10" name="cit_date" id="date" required value="{{ citation.cit_date }}">
+
+        <label for="citation">Citation :</label>
+        <textarea id="citation" name="cit_libelle" rows="3" cols="30" required>{{ citation.cit_libelle }}</textarea>
+
+        <button type="submit">Valider</button>
+    </form>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#update').fadeToggle(0.5);
+    });
+
+    $('#modifier').on('click', function() {
+        $('#show').fadeToggle(0.5);
+        $('#update').fadeToggle(0.5);
+    });
+</script>

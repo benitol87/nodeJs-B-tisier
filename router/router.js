@@ -10,17 +10,26 @@ module.exports = function(app){
 // Main Routes
     app.get('/', HomeController.Index);
 
+
 // citations
-    app.get('/citations/lister', CitationController.ListerCitation);
-    app.get('/citations/ajouter', CitationController.AjouterCitation);
-    app.post('/citations/ajouter', CitationController.AjouterCitation);
-    app.get('/citations/rechercher', CitationController.RechercherCitation);
+    app.get('/citations', CitationController.citations);
+    app.get('/citations/ajouter', CitationController.ajouter);
+    app.post('/citations/ajouter', CitationController.ajouter);
+    app.get('/citations/rechercher', CitationController.rechercher);
+
+    app.get('/citation/:num', CitationController.citation);
+    app.post('/citation/:num', CitationController.citation);
+
 
  // villes
-   app.get('/villes/lister', VilleController.ListerVille);
-   app.get('/villes/ajouter', VilleController.AjouterVille);
-   app.post('/villes/ajouter', VilleController.AjouterVille);
-   app.get('/villes/modifier', VilleController.ModifierVille);
+   app.get('/villes', VilleController.villes);
+   app.get('/villes/ajouter', VilleController.ajouter);
+   app.post('/villes/ajouter', VilleController.ajouter);
+
+   app.get('/ville/:num', VilleController.ville);
+   app.post('/ville/:num', VilleController.ville);
+   app.get('/ville/:num/supprimer', VilleController.supprimer);
+
 
 // connection
    app.get('/connect', ConnectController.Connect);
@@ -33,6 +42,7 @@ module.exports = function(app){
    app.get('/detailPersonne/:num', PersonneController.DetailPersonne);
    app.get('/ajouterPersonne', PersonneController.AjouterPersonne);
    app.post('/ajouterPersonne', PersonneController.AjouterPersonne);
+
 
 // tout le reste
   app.get('*', HomeController.Index);

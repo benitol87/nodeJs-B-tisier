@@ -44,7 +44,7 @@ module.exports.DetailPersonne = function(request, response){
 // ////////////////////////////////////////////// A J O U T E R     P E R S O N N E S
 module.exports.AjouterPersonne = function(request, response){
 	if (!request.session.num || !request.session.login) {
-		console.log("vous n'êtes pas connecté");
+        response.message = "Vous n'êtes pas connecté.";
 		home_controller.Index(request, response);
 		return;
 	}
@@ -116,7 +116,7 @@ module.exports.AjouterPersonne = function(request, response){
 					response.render('ajouterSalarie', response);
 				}
 
-			);			
+			);
 		}
 	} else if(request.body.annee){
 		// Troisième arrivée 1 : récupération des données de l'étudiant
@@ -174,5 +174,5 @@ module.exports.AjouterPersonne = function(request, response){
 
 
 	}
-	
+
 };

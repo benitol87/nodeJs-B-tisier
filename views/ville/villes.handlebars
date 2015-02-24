@@ -2,16 +2,21 @@
 {{> menu}} <!--   c'est le code HTML qui se répéte pour chaque page  -->
 <!--   mais, il peut lui aussi contenir du code handlebars (tests par exemple)  -->
 
- <h1>Liste des villes enregistrées</h1>
+<h1>Liste des villes enregistrées</h1>
 <p>Il y a actuellement {{nbVille}} villes enregistrées</p>
 
 <table>
-     <tr>
-       <th>Numéro</th>
-       <th>Nom</th>
-     </tr>
+    <tr>
+        <th>Numéro</th>
+        <th>Nom</th>
+    </tr>
  {{#each listeVille}} <!--  parcours de listeVille -->
-    <tr><td>{{this.vil_num}}</td><td>{{this.vil_nom}}</td></tr>
+    <tr>
+        <td><a href="/ville/{{this.vil_num}}">{{this.vil_num}}</a></td>
+        <td>{{this.vil_nom}}</td>
+    </tr>
  {{/each}}
- </table>
+</table>
 
+
+<p>Cliquez sur le numéro d'une ville pour voir les détails, la modifier, ou la supprimer.</p>
