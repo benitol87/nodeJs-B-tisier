@@ -1,0 +1,28 @@
+{{> enTete}}
+{{> menu}}	
+<h1>Ajouter un étudiant</h1>
+
+{{#if listeDivision}}
+	<form action="#" method="POST">
+		<div>
+			<label for="annee">Année </label>
+			<select name="annee">
+			{{#each listeDivision}} <!--  parcours de listeVille -->
+				<option value="{{this.div_num}}">{{this.div_nom}}</option>
+			{{/each}}
+			</select>
+		</div>
+		<div>
+			<label for="dep">Département </label>
+			<select name="dep">
+			{{#each listeDepartement}} <!--  parcours de listeVille -->
+				<option value="{{this.dep_num}}">{{this.dep_nom}}</option>
+			{{/each}}
+			</select>
+		</div>
+		<input type="submit" value="Valider"/>
+	</form>
+{{else}}
+	<img src="/image/valid.png"/>
+	<span>L'étudiant a été ajouté !</span>
+{{/if}}
