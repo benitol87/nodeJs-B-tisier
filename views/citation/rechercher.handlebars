@@ -1,3 +1,57 @@
 {{> enTete}}
 {{> menu}}
 <h1> Rechercher une citation</h1>
+
+{{#if enseignants}}
+<form action="#" method="POST">
+	<div>
+		<label for="enseignant">Enseignant : </label>
+		<select name="enseignant">
+			<option value="-1">Tous</option>
+			{{#each enseignants}}
+			<option value="{{this.per_num}}">{{this.per_nom}}</option>
+			{{/each}}
+		</select>
+	</div>
+	<div>
+		<label for="date">Date : </label>
+		<select name="date">
+			<option value="-1">Toutes</option>
+			{{#each dates}}
+			<option value="{{this.cit_date}}">{{this.cit_date}}</option>
+			{{/each}}
+		</select>
+	</div>
+	<div>
+		<label for="note">Note : </label>
+		<select name="note">
+			<option value="-1">Toutes</option>
+			{{#each moyennes}}
+			<option value="{{this.moyenne}}">{{this.moyenne}}</option>
+			{{/each}}
+		</select>
+	</div>
+	<input type="submit" value="Rechercher"/>
+</form>
+{{else}}
+	{{#if listeCitations}}
+<table>
+	<tr>
+		<th>Enseignant</th>
+		<th>Libellé</th>
+		<th>Date</th>
+		<th>Note</th>
+	</tr>
+		{{#each listeCitations}}
+	<tr>
+		<td>{{this.per_nom}}</td>
+		<td>{{this.cit_libelle}}</td>
+		<td>{{this.cit_date}}</td>
+		<td>{{this.moyenne}}</td>
+	</tr>	
+		{{/each}}
+</table>
+	{{else}}
+	Pas de résultats :(
+	{{/if}}
+{{/if}}

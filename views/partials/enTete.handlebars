@@ -8,7 +8,11 @@
 		</div>
 		<div id="entete">
 		<div id="logo">
+			{{#if session.login}}
 			<img src="/image/smile.jpg" id= "imLogo" alt="Logo bêtisier IUT" title="Logo bêtisier IUT Limousin" />
+			{{else}}
+			<img src="/image/lebetisier.gif" id= "imLogo" alt="Logo bêtisier IUT" title="Logo bêtisier IUT Limousin" />
+			{{/if}}
 		</div>
 			
 		

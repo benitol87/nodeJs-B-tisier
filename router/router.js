@@ -16,6 +16,7 @@ module.exports = function(app){
     app.get('/citations/ajouter', CitationController.ajouter);
     app.post('/citations/ajouter', CitationController.ajouter);
     app.get('/citations/rechercher', CitationController.rechercher);
+    app.post('/citations/rechercher', CitationController.rechercher);
 
     app.get('/citation/:num', CitationController.citation);
     app.post('/citation/:num', CitationController.citation);

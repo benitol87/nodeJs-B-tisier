@@ -25,6 +25,8 @@ module.exports.Connect = function(request, response){
 					// dans une variable de session
 					request.session.num = result[0].per_num;
 					request.session.login = request.body.login;
+					if(result[0].per_admin==1)
+						request.session.admin = true;
 
 					callback();
 					return;

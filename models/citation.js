@@ -74,3 +74,72 @@ module.exports.setCitation = function(data, callback) {
         }
     });
 };
+
+module.exports.getAllEnseignantsCites = function( callback){
+	db.getConnection(function(err, connexion){
+        if(!err){
+            var query = 'SELECT DISTINCT c.per_num, p.per_nom '+
+            			' FROM citation c '+
+            			' JOIN personne p ON p.per_num=c.per_num '+
+            			' WHERE c.cit_valide=1 '+
+            			' ORDER BY p.per_nom ';
+            connexion.query(query, callback);
+            connexion.release();
+        }
+    });
+};
+
+module.exports.getAllDatesCitations = function( callback){
+	db.getConnection(function(err, connexion){
+        if(!err){
+            var query = 'SELECT DISTINCT DATE_FORMAT(cit_date, "%d/%m/%Y") AS cit_date '+
+            			' FROM citation '+
+            			' WHERE cit_valide=1 '+
+            			' ORDER BY cit_date DESC';
+            connexion.query(query, callback);
+            connexion.release();
+        }
+    });
+};
+
+module.exports.getAllMoyennesCitations = function( callback){
+	db.getConnection(function(err, connexion){
+        if(!err){
+            var query = 'SELECT AVG(vot_valeur) AS moyenne '+
+            			' FROM vote v '+
+            			' JOIN citation c ON v.cit_num = c.cit_num '+
+            			' WHERE cit_valide=1 '+
+            			' GROUP BY v.cit_num '+
+            			' ORDER BY moyenne';
+            connexion.query(query, callback);
+            connexion.release();
+        }
+    });
+};
+
+module.exports.rechercherCitations = function(data, callback){
+	db.getConnection(function(err, connexion){
+        if(!err){
+            var query = 'SELECT cit_libelle, per_nom, DATE_FORMAT(cit_date, "%d/%m/%Y") AS cit_date, AVG(vot_valeur) AS moyenne '+
+            			' FROM citation c'+
+            			' JOIN vote v ON c.cit_num = v.cit_num '+
+            			' JOIN personne p ON p.per_num = c.per_num '+
+            			' WHERE cit_valide=1 ';
+            if(data["enseignant"]!="-1"){
+            	query = query + ' AND p.per_num = '+connexion.escape(data["enseignant"]);
+            }
+            if(data["date"]!="-1"){
+            	query = query + ' AND DATE_FORMAT(c.cit_date, "%d/%m/%Y") = '+connexion.escape(data["date"]);
+            }
+            query = query +	' GROUP BY c.cit_num, cit_libelle, per_nom, cit_date '
+            if(data["note"]!="-1"){
+            	query = query + ' HAVING moyenne BETWEEN '+connexion.escape(parseInt(data["note"])-1)+' AND '+connexion.escape(parseInt(data["note"])+1);
+            }
+            query = query +	' ORDER BY per_nom ';
+
+            //console.log(query);
+            connexion.query(query, callback);
+            connexion.release();
+        }
+    });
+}
