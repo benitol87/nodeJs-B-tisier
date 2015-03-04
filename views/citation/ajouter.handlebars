@@ -28,10 +28,9 @@
 
 
 {{#if cit_libelle}}
-<p>Résumé de la citation : </p>
-<ul>
-    <li><u>publiée par :</u> {{personne.per_nom}} {{personne.per_prenom}}</li>
-    <li><u>le :</u> {{cit_date}}</li>
-    <li><u>contenu :</u> {{cit_libelle}}</li>
-</ul>
+    <h3>Résumé de la citation</h3>
+
+    <p>Publiée par : <b>{{ personne.per_nom }} {{ personne.per_prenom }}</b></p>
+    <p>Le : <b>{{ cit_date }}</b></p>
+    <p>Contenu : <b>{{ cit_libelle }}</b></p>
 {{/if}}
