@@ -65,7 +65,7 @@ module.exports.getLoginOk = function (data, callback) {
 			var resu = sha256.digest("base64");	
 		//console.log ('Mot de passe en clair : ' + data.pass); 
 		//console.log ('Mot de passe crypté : ' + resu);	 	
-			req= "SELECT per_num from personne where per_login =" + connexion.escape(data.login) + " and per_pwd = " +connexion.escape(resu);
+			req= "SELECT per_num, per_admin from personne where per_login =" + connexion.escape(data.login) + " and per_pwd = " +connexion.escape(resu);
 		//console.log(req);
 			connexion.query(req, callback);
 			connexion.release();
