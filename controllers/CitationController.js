@@ -1,6 +1,7 @@
 var model_citation = require('../models/citation.js');
 var model_personne = require('../models/personne.js');
 var model_etudiant = require('../models/etudiant.js');
+var model_mot = require('../models/mot.js');
 var home_controller = require('./HomeController.js');
 
 var view_root = "citation/";
@@ -91,7 +92,19 @@ module.exports.ajouter = 	function(request, response){
     				return;
     			};
     			response.personnes = result;
-    			response.render(view_root + 'ajouter', response);
+
+                model_mot.getMotsInterdits(function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+
+                    response.mots = [];
+                    for (var i = 0; i < result.length; i++)
+                        response.mots.push(result[i]["mot_interdit"]);
+
+                    response.render(view_root + 'ajouter', response);
+                });
     		});
     	}
     });

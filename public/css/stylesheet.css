@@ -166,3 +166,7 @@ h1 {
     padding: 20px;
     width: 30%;
 }
+
+.list-unstyled {
+    list-style: none;
+}
