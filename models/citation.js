@@ -53,7 +53,7 @@ module.exports.addCitation = function (data, callback) {
     // connection à la base
 	db.getConnection(function(err, connexion){
 		if(!err){
-			connexion.query('INSERT INTO citation SET ?', data, callback);
+            connexion.query('INSERT INTO citation SET ?', data, callback);
 			connexion.release();
 		 }
 	});
@@ -63,7 +63,8 @@ module.exports.setCitation = function(data, callback) {
     db.getConnection(function(err, connexion){
         if(!err){
             var query = 'UPDATE citation SET cit_libelle = ? WHERE cit_num = ?';
-            connexion.query(query, [data['cit_libelle'], data['cit_num']], callback);
+            var res = connexion.query(query, [data['cit_libelle'], data['cit_num']], callback);
+            console.log(res.sql);
             connexion.release();
         }
     });
