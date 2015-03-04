@@ -1,6 +1,7 @@
 var model_citation = require('../models/citation.js');
 var model_personne = require('../models/personne.js');
 var home_controller = require('./HomeController.js');
+var async = require("async");
 
 var view_root = "citation/";
 
@@ -119,7 +120,72 @@ module.exports.citation = function(request, response){
 // ////////////////////////////////////////////// R E C H E R C H E R     C I T A T I O N
 
 module.exports.rechercher = function(request, response){
-	 response.title = 'Rechercher des citations';
-	 response.render(view_root + 'rechercher', response);
-	} ;
+	response.title = 'Rechercher des citations';
+
+	if (request.body.enseignant){
+		// Recherche des citations
+		async.parallel([
+				function(callback){
+					// Effectuer la recherche
+					model_citation.rechercherCitations(request.body, function (err, result) {
+						if (err) {
+								// gestion de l'erreur
+								console.log(err);
+								return;
+						}
+						response.listeCitations = result;
+						callback();
+					});
+				}
+			],
+			function(){
+				// Fin des requetes
+				response.render(view_root+'rechercher', response);
+			}
+
+		);
+	} else {
+		// Affichage du formulaire
+		async.parallel([
+				function(callback){
+					// Récupérer la liste des enseignants cités
+					model_citation.getAllEnseignantsCites( function (err, result) {
+						if (err) {
+								// gestion de l'erreur
+								console.log(err);
+								return;
+						}
+						response.enseignants = result;
+						callback();
+					});
+				},function(callback){
+					model_citation.getAllDatesCitations( function (err, result) {
+						if (err) {
+								// gestion de l'erreur
+								console.log(err);
+								return;
+						}
+						response.dates = result;
+						callback();
+					});
+				},function(callback){
+					model_citation.getAllMoyennesCitations( function (err, result) {
+						if (err) {
+								// gestion de l'erreur
+								console.log(err);
+								return;
+						}
+						response.moyennes = result;
+						callback();
+					});
+				}
+			],
+			function(){
+				// Fin des requetes
+				response.render(view_root+'rechercher', response);
+			}
+
+		);
+	}
+} ;
 
