@@ -15,11 +15,14 @@ module.exports = function(app){
     app.get('/citations', CitationController.citations);
     app.get('/citations/ajouter', CitationController.ajouter);
     app.post('/citations/ajouter', CitationController.ajouter);
+    app.get('/citations/gestion', CitationController.gestion);
     app.get('/citations/rechercher', CitationController.rechercher);
     app.post('/citations/rechercher', CitationController.rechercher);
 
     app.get('/citation/:num', CitationController.citation);
     app.post('/citation/:num', CitationController.citation);
+    app.get('/citation/:num/valider', CitationController.valider);
+    app.get('/citation/:num/supprimer', CitationController.supprimer);
 
 
  // villes

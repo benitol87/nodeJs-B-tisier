@@ -24,16 +24,29 @@ module.exports.citations = 	function(request, response){
         if (!request.session.num || !request.session.login) {
             response.render(view_root + 'citations', response);
         } else {
-            model_etudiant.getEtudiant(request.session.num, function (err, result) {
+            model_personne.getDetailPersonne(request.session.num, function (err, result) {
                 if (err) {
                     console.log(err);
                     return;
                 }
 
                 if (result.length != 0) {
-                    response.is_etudiant = true;
+                    response.personne = result[0];
+                    if (response.personne != 0) {
+                        response.is_authorized = true;
+                    }
                 }
-                response.render(view_root + 'citations', response);
+                model_etudiant.getEtudiant(request.session.num, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+
+                    if (result.length != 0) {
+                        response.is_authorized = true;
+                    }
+                    response.render(view_root + 'citations', response);
+                });
             });
         }
 	});
@@ -112,6 +125,50 @@ module.exports.ajouter = 	function(request, response){
 	} ;
 
 
+// ////////////////////////////////////////////// G E R E R     C I T A T I O N
+
+module.exports.gestion = function(request, response) {
+    if (!request.session.num || !request.session.login) {
+        response.message = "Vous n'êtes pas connecté.";
+        home_controller.Index(request, response);
+        return;
+    }
+
+    model_personne.getDetailPersonne(request.session.num, function (err, result) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        if (result.length == 0) {
+            response.message = "Seuls les administrateurs peuvent accéder à la gestion des citations.";
+            home_controller.Index(request, response);
+            return;
+        }
+
+        model_citation.getCitations(function (err, result) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            response.citations = result;
+            response.nbCitation = result.length;
+            model_citation.getCitationsInvalides(function (err, result) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+
+                response.citations_invalides = result;
+                response.nbCitation_invalides = result.length;
+                response.render(view_root + 'gestion', response);
+            });
+        });
+    });
+};
+
+
 // ////////////////////////////////////////////// M O D I F I E R     C I T A T I O N
 
 module.exports.citation = function(request, response){
@@ -121,53 +178,63 @@ module.exports.citation = function(request, response){
         return;
     }
 
-    model_etudiant.getEtudiant(request.session.num, function (err, result) {
+    model_personne.getDetailPersonne(request.session.num, function (err, result) {
         if (err) {
             console.log(err);
             return;
         }
 
-        if (result.length == 0) {
-            response.message = "Seul les étudiants peuvent modifier des blagues.";
-            home_controller.Index(request, response);
-            return;
+        response.is_admin = false;
+        if (result.length != 0) {
+            response.is_admin = true;
         }
-
-        if (request.method == "POST") {
-            data = request.body;
-            data['cit_num'] = request.params.num;
-            model_citation.setCitation(data, function (err, result) {
-                if (err) {
-                    console.log(err);
-                    return;
-                };
-            });
-        }
-
-        model_citation.getCitation(request.params.num, function (err, result) {
+        model_etudiant.getEtudiant(request.session.num, function (err, result) {
             if (err) {
                 console.log(err);
                 return;
             }
-            response.title = 'Citation numéro ' + result[0].cit_num;
-            response.citation = result[0];
 
-    		model_personne.getDetailPersonne(result[0].per_num, function (err, result) {
-    			if (err) {
-    				console.log(err);
-    				return;
-    			};
-    			response.personne = result[0];
+            if (!response.is_admin && result.length == 0) {
+                response.message = "Seul les étudiants et administrateurs peuvent modifier des blagues.";
+                home_controller.Index(request, response);
+            }
 
-    	        model_personne.getListePersonne( function (err, result) {
-    				if (err) {
-    					console.log(err);
-    					return;
-    				};
-    				response.personnes = result;
-    	        	response.render(view_root + 'citation', response);
-    			});
-    		});
+            if (request.method == "POST") {
+                data = request.body;
+                data['cit_num'] = request.params.num;
+                model_citation.setCitation(data, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    };
+                });
+            }
+
+            model_citation.getCitation(request.params.num, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                response.title = 'Citation numéro ' + result[0].cit_num;
+                response.citation = result[0];
+
+        		model_personne.getDetailPersonne(result[0].per_num, function (err, result) {
+        			if (err) {
+        				console.log(err);
+        				return;
+        			};
+        			response.personne = result[0];
+
+        	        model_personne.getListePersonne( function (err, result) {
+        				if (err) {
+        					console.log(err);
+        					return;
+        				};
+        				response.personnes = result;
+        	        	response.render(view_root + 'citation', response);
+        			});
+        		});
+            });
         });
     });
 };
@@ -246,3 +313,63 @@ module.exports.rechercher = function(request, response){
 	}
 } ;
 
+
+
+// ////////////////////////////////////////////// V A L I D E R     C I T A T I O N
+
+module.exports.valider = function(request, response) {
+    var message = "Seuls les admins peuvent valider des citations."
+    verif_connected_as_admin(request, response, message, function () {
+        model_citation.validateCitation(request.params.num, function (err, result) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            response.message = "La citation " + request.params.num + " a été validée.";
+            home_controller.Index(request, response);
+        });
+    });
+};
+
+
+// ////////////////////////////////////////////// S U P P R I M E R     C I T A T I O N
+
+module.exports.supprimer = function(request, response) {
+    var message = "Seuls les admins peuvent supprimer des citations."
+    verif_connected_as_admin(request, response, message, function () {
+        model_citation.deleteCitation(request.params.num, function (err, result) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            response.message = "La citation " + request.params.num + " a bien été supprimée.";
+            home_controller.Index(request, response);
+        });
+    });
+};
+
+
+verif_connected_as_admin = function(request, response, message, callback) {
+    if (!request.session.num || !request.session.login) {
+        response.message = "Vous n'êtes pas connecté.";
+        home_controller.Index(request, response);
+        return;
+    }
+
+    model_personne.getDetailPersonne(request.session.num, function (err, result) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        if (result.length == 0) {
+            response.message = message;
+            home_controller.Index(request, response);
+            return;
+        }
+
+        callback(result);
+    });
+};
