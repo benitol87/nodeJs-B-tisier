@@ -21,6 +21,7 @@ module.exports = function(app){
 
     app.get('/citation/:num', CitationController.citation);
     app.post('/citation/:num', CitationController.citation);
+    app.post('/citation/:num/noter', CitationController.noter);
     app.get('/citation/:num/valider', CitationController.valider);
     app.get('/citation/:num/supprimer', CitationController.supprimer);
 

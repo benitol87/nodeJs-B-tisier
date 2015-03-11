@@ -7,8 +7,12 @@
     <p>Publiée par : <b>{{ personne.per_nom }} {{ personne.per_prenom }}</b></p>
     <p>Le : <b>{{ citation.cit_date }}</b></p>
     <p>Contenu : <b>{{ citation.cit_libelle }}</b></p>
+    {{#if citation.moyenne}}
+        <p>Moyenne : <b>{{citation.moyenne}}</b></p>
+    {{/if}}
 
     <button id="modifier">Modifier la citation</button>
+    <button id="noter">Noter la citation</button>
 </div>
 
 <div id="update">
@@ -36,14 +40,46 @@
     </form>
 </div>
 
+<div id="notate">
+    <h1>Notation de la citation</h1>
+
+    <form action="/citation/{{ citation.cit_num }}/noter" method="post">
+        <div id="slider"></div>
+
+        <label for="note">Note :</label>
+        <input type="text" maxlength="3" name="vot_valeur" id="note" required pattern="[0-9]{0,2}">
+
+        <button type="submit">Noter la citation</button>
+    </form>
+</div>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#update').fadeToggle(0.5);
+        $('#update').hide();
+        $('#notate').hide();
+
+        $('#slider').slider({
+            orientation: "horizontal",
+            range: "min",
+            max: 20,
+            value: 10,
+            slide: refreshValue,
+            change: refreshValue
+        });
     });
 
     $('#modifier').on('click', function() {
         $('#show').fadeToggle(0.5);
         $('#update').fadeToggle(0.5);
     });
+
+    $('#noter').on('click', function() {
+        $('#show').fadeToggle(0.5);
+        $('#notate').fadeToggle(0.5);
+    });
+
+    function refreshValue() {
+        var value = $('#slider').slider('value');
+        $('#note').val(value);
+    }
 </script>

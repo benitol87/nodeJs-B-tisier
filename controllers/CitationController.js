@@ -1,6 +1,7 @@
 var model_citation = require('../models/citation.js');
 var model_personne = require('../models/personne.js');
 var model_etudiant = require('../models/etudiant.js');
+var model_vote = require('../models/vote.js');
 var model_mot = require('../models/mot.js');
 var home_controller = require('./HomeController.js');
 var async = require("async");
@@ -178,16 +179,9 @@ module.exports.citation = function(request, response){
         return;
     }
 
-    model_personne.getDetailPersonne(request.session.num, function (err, result) {
-        if (err) {
-            console.log(err);
-            return;
-        }
+    is_admin(request.session.num, function (is_admin) {
+        response.is_admin = is_admin;
 
-        response.is_admin = false;
-        if (result.length != 0) {
-            response.is_admin = true;
-        }
         model_etudiant.getEtudiant(request.session.num, function (err, result) {
             if (err) {
                 console.log(err);
@@ -197,6 +191,7 @@ module.exports.citation = function(request, response){
             if (!response.is_admin && result.length == 0) {
                 response.message = "Seul les étudiants et administrateurs peuvent modifier des blagues.";
                 home_controller.Index(request, response);
+                return;
             }
 
             if (request.method == "POST") {
@@ -313,6 +308,53 @@ module.exports.rechercher = function(request, response){
 	}
 } ;
 
+// ////////////////////////////////////////////// N O T E R     C I T A T I O N
+
+module.exports.noter = function(request, response) {
+    if (!request.session.num || !request.session.login) {
+        response.message = "Vous n'êtes pas connecté.";
+        home_controller.Index(request, response);
+        return;
+    }
+
+    model_etudiant.getEtudiant(request.session.num, function (err, result) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        if (result.length == 0) {
+            response.message = "Seul les étudiants peuvent noter des blagues.";
+            home_controller.Index(request, response);
+            return;
+        }
+
+        if (request.method == 'POST') {
+            if (request.body.length != 0) {
+                var data = request.body;
+                data['per_num'] = request.session.num;
+                data['cit_num'] = request.params.num;
+
+                model_vote.addVote(data, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+
+                    response.redirect('/citation/' + request.params.num);
+                });
+            } else {
+                response.message = "Erreur lors de l'ajout d'un vote : la valeur du vote n'est pas définie.";
+                home_controller.Index(request, response);
+                return;
+            }
+        } else {
+            response.message = "Erreur lors de l'ajout d'un vote : aucun vote n'a été posté.";
+            home_controller.Index(request, response);
+            return;
+        }
+    });
+};
 
 
 // ////////////////////////////////////////////// V A L I D E R     C I T A T I O N
@@ -358,18 +400,30 @@ verif_connected_as_admin = function(request, response, message, callback) {
         return;
     }
 
-    model_personne.getDetailPersonne(request.session.num, function (err, result) {
+    is_admin(request.session.num, function (is_admin) {
+        console.log(is_admin);
+
+        if (!is_admin) {
+            response.message = message;
+            home_controller.Index(request, response);
+            return;
+        }
+        callback();
+    });
+};
+
+is_admin = function(per_num, callback) {
+    model_personne.getDetailPersonne(per_num, function (err, result) {
         if (err) {
             console.log(err);
             return;
         }
 
-        if (result.length == 0) {
-            response.message = message;
-            home_controller.Index(request, response);
-            return;
+        var is_admin = false;
+        if (result.length > 0 && result[0].per_admin) {
+            is_admin = true;
         }
 
-        callback(result);
+        callback(is_admin);
     });
 };

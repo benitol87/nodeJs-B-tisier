@@ -12,10 +12,9 @@ module.exports.getCitations = function (callback) {
 		if(!err){
 			var sql = 'SELECT c.cit_num, per_nom, cit_libelle, DATE_FORMAT(cit_date, "%d/%m/%Y") AS cit_date, AVG(vot_valeur) AS moyenne FROM citation c '+
 				'JOIN personne p ON c.per_num = p.per_num '+
-				'JOIN vote v ON v.cit_num = c.cit_num '+
+				'LEFT JOIN vote v ON v.cit_num = c.cit_num '+
 				'WHERE cit_date IS NOT NULL AND cit_valide = 1 '+
-				'GROUP BY per_nom, c.cit_num, cit_libelle, cit_date '+
-				'HAVING moyenne IS NOT NULL';
+				'GROUP BY per_nom, c.cit_num, cit_libelle, cit_date';
 			// s'il n'y a pas d'erreur de connexion
 			// execution de la requête SQL
 			connexion.query(sql, callback);
@@ -55,12 +54,11 @@ module.exports.getCitation = function (cit_num, callback) {
         		'SELECT c.cit_num, c.per_num, per_nom, cit_libelle, DATE_FORMAT(cit_date, "%d/%m/%Y") AS cit_date, AVG(vot_valeur) AS moyenne ' +
         		'FROM citation c ' +
 					'JOIN personne p ON c.per_num = p.per_num ' +
-					'JOIN vote v ON v.cit_num = c.cit_num ' +
+					'LEFT JOIN vote v ON v.cit_num = c.cit_num ' +
                 'WHERE c.cit_num = ' + connexion.escape(cit_num) +
 					'AND cit_date IS NOT NULL ' +
 					'AND cit_valide = 1 ' +
-				'GROUP BY per_nom, c.cit_num, cit_libelle, cit_date ' +
-				'HAVING moyenne IS NOT NULL';
+				'GROUP BY per_nom, c.cit_num, cit_libelle, cit_date ';
 
             connexion.query(query, callback);
             connexion.release();
