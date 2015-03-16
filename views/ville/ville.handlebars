@@ -8,7 +8,9 @@
     <p>Nom de la ville : <b>{{ ville.vil_nom }}</b></p>
 
     <button id="modifier">Modifier la ville</button>
-    <a href="/ville/{{ ville.vil_num }}/supprimer">Supprimer la ville</button>
+    {{#if is_admin}}
+        <a href="/ville/{{ ville.vil_num }}/supprimer"><button>Supprimer la ville</button></a>
+    {{/if}}
 </div>
 
 

@@ -1,4 +1,5 @@
 var model_ville = require('../models/ville.js');
+var model_personne = require('../models/personne.js');
 var model_departement = require('../models/departement.js');
 var home_controller = require('./HomeController.js');
 var view_root = "ville/";
@@ -72,49 +73,92 @@ module.exports.ville = function(request, response){
         }
         response.title = 'Ville de ' + result[0].vil_nom;
         response.ville = result[0];
-        response.render(view_root + 'ville', response);
+
+        if (request.session.num) {
+            is_admin(request.session.num, function (is_admin) {
+                response.is_admin = is_admin;
+                response.render(view_root + 'ville', response);
+            });
+        } else {
+            response.render(view_root + 'ville', response);
+        }
     });
 };
 
 
+   // ////////////////////////////////////////////// S U P P R I M E R     V I L L E
+
 module.exports.supprimer = function(request, response){
+    var message = "Seuls les admins peuvent supprimer des villes."
+    verif_connected_as_admin(request, response, message, function () {
+        model_ville.getVille(request.params.num, function (err, result) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            var ville = result[0];
+            response.ville = ville;
+            model_departement.getDepartementByVille(ville, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+
+                if (result.length != 0) {
+                    response.title = "Impossible de supprimer la ville, un département est associé à celle-ci";
+                    response.supprimer = false;
+                    response.render(view_root + 'supprimer', response);
+                    return;
+                }
+            });
+
+            model_ville.deleteVille(ville, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+
+                response.supprimer = true;
+                response.render(view_root + 'supprimer', response);
+            });
+        });
+    });
+};
+
+
+
+verif_connected_as_admin = function(request, response, message, callback) {
     if (!request.session.num || !request.session.login) {
         response.message = "Vous n'êtes pas connecté.";
         home_controller.Index(request, response);
         return;
     }
 
-    var num = request.params.num;
-    model_ville.getVille(num, function (err, result) {
+    is_admin(request.session.num, function (is_admin) {
+        console.log(is_admin);
+
+        if (!is_admin) {
+            response.message = message;
+            home_controller.Index(request, response);
+            return;
+        }
+        callback();
+    });
+};
+
+is_admin = function(per_num, callback) {
+    model_personne.getDetailPersonne(per_num, function (err, result) {
         if (err) {
             console.log(err);
             return;
         }
 
-        var ville = result[0];
-        response.ville = ville;
-        model_departement.getDepartementByVille(ville, function (err, result) {
-            if (err) {
-                console.log(err);
-                return;
-            }
+        var is_admin = false;
+        if (result.length > 0 && result[0].per_admin) {
+            is_admin = true;
+        }
 
-            if (result.length != 0) {
-                response.title = "Erreur : impossible de supprimer la ville";
-                response.supprimer = false;
-                response.render(view_root + 'supprimer', response);
-                return;
-            }
-        });
-
-        model_ville.deleteVille(ville, function (err, result) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-
-            response.supprimer = true;
-            response.render(view_root + 'supprimer', response);
-        });
+        callback(is_admin);
     });
 };

@@ -3,6 +3,16 @@
 <h1>{{title}}</h1>
 
 
+{{#if cit_libelle}}
+    <h3>Résumé de la citation</h3>
+
+    <p>Publiée par : <b>{{ personne.per_nom }} {{ personne.per_prenom }}</b></p>
+    <p>Le : <b>{{ cit_date }}</b></p>
+    <p>Contenu : <b>{{ cit_libelle }}</b></p>
+{{/if}}
+
+
+
 {{#if personnes}}
 <form method="post" action="#">
     <label for="personne">Blagueur :</label>
@@ -23,14 +33,47 @@
     <textarea id="citation" name="cit_libelle" rows="3" cols="30" required></textarea>
 
     <button type="submit">Valider</button>
+
+    <ul id="mot_interdits" class="list-unstyled">
+    </ul>
 </form>
-{{/if}}
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        var mots = "{{mots}}".split(',');
 
-{{#if cit_libelle}}
-    <h3>Résumé de la citation</h3>
+        $('#citation').on('keyup', function() {
+            var texte = $(this).val().split(" ");
 
-    <p>Publiée par : <b>{{ personne.per_nom }} {{ personne.per_prenom }}</b></p>
-    <p>Le : <b>{{ cit_date }}</b></p>
-    <p>Contenu : <b>{{ cit_libelle }}</b></p>
+            for (var i = 0; i < texte.length; i++) {
+                var index = mots.indexOf(texte[i]);
+                if (index >= 0) {
+                    var str = "";
+                    for (var j = 0; j < texte[i].length; j++) {
+                        str += '*';
+                    }
+                    texte[i] = str;
+
+                    afficherMotsInterdit(mots[index]);
+                }
+            }
+
+            $(this).val(texte.join(" "));
+        });
+    });
+
+    function afficherMotsInterdit(mot) {
+        var image = document.createElement('img');
+        image.src = "/image/erreur.png";
+
+        var span = document.createElement('span');
+        span.appendChild(document.createTextNode(" le mot " + mot + " : est interdit "));
+
+        var list_item = document.createElement('li');
+        list_item.appendChild(image);
+        list_item.appendChild(span);
+
+        $('#mot_interdits').append(list_item);
+    }
+</script>
 {{/if}}

@@ -5,7 +5,7 @@
 <p>Il y a actuellement <b>{{ nbCitation }}</b> citations enregistrées</p>
 
 
-{{#if is_etudiant}}
+{{#if is_authorized}}
   <table>
        <tr>
          <th>Nom de l'enseignant</th>
@@ -18,12 +18,19 @@
           <td>{{ this.per_nom }}</td>
           <td><a href="/citation/{{ this.cit_num }}">{{ this.cit_libelle }}</a></td>
           <td>{{ this.cit_date }}</td>
-          <td>{{ this.moyenne }}</td>
+          {{#if this.moyenne }}
+            <td>{{ this.moyenne }}</td>
+          {{else}}
+            <td>Pas encore évaluée</td>
+          {{/if}}
       </tr>
       {{/each}}
-   </table>
+  </table>
 
   <p>Cliquez sur le nom d'une citation pour la modifier.</p>
+  {{#if personne.per_admin}}
+    <a href="/citations/gestion"><button>Gérer les citations (valider / supprimer)</button></a>
+  {{/if}}
 
 {{else}}
   <table>
@@ -38,7 +45,11 @@
           <td>{{ this.per_nom }}</td>
           <td>{{ this.cit_libelle }}</td>
           <td>{{ this.cit_date }}</td>
-          <td>{{ this.moyenne }}</td>
+          {{#if this.moyenne }}
+            <td>{{ this.moyenne }}</td>
+          {{else}}
+            <td>Pas encore évaluée</td>
+          {{/if}}
       </tr>
       {{/each}}
    </table>

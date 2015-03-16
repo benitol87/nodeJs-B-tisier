@@ -3,6 +3,10 @@
     "description": "Un exemple Express.js application utilisant MVC Template",
     "private": true,
     "version": "0.1.4",
+    "scripts": {
+        "prestart": "npm install",
+        "start": "node app"
+    },
     "dependencies": {
         "express": "~4.10",
         "express-handlebars": "~1.1",
