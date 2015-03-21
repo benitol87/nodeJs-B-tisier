@@ -43,13 +43,13 @@ module.exports = function(app){
 
 
  //personne
-   app.get('/listerPersonne', PersonneController.ListerPersonne);
-   app.get('/detailPersonne/:num', PersonneController.DetailPersonne);
+   app.get('/personne/lister', PersonneController.ListerPersonne);
+   app.get('/personne/detail/:num', PersonneController.DetailPersonne);
    app.get('/personne/modifier/:num', PersonneController.ModifierPersonne);
    app.post('/personne/modifier/:num', PersonneController.ModifierPersonne);
    app.get('/personne/supprimer/:num', PersonneController.SupprimerPersonne);
-   app.get('/ajouterPersonne', PersonneController.AjouterPersonne);
-   app.post('/ajouterPersonne', PersonneController.AjouterPersonne);
+   app.get('/personne/ajouter', PersonneController.AjouterPersonne);
+   app.post('/personne/ajouter', PersonneController.AjouterPersonne);
 
 
 // tout le reste

@@ -105,47 +105,6 @@ module.exports.addPersonne = function (data, callback) {
 	});   
 };
 
-// Méthode qui efface toutes les données d'un étudiant dont on passe l'identifiant, sauf celles contenues dans la table personne
-module.exports.deleteEtudiant = function (data, callback){
-	db.getConnection(function(err,connexion){
-		if(!err){
-			var sql = ''; 
-			sql += 'DELETE FROM vote WHERE per_num = '+connexion.escape(data['per_num'])+';\n';
-			sql += 'DELETE FROM vote WHERE cit_num IN (';
-			sql +=			'SELECT cit_num FROM citation WHERE per_num	= '+connexion.escape(data['per_num'])+' OR per_num_valide = '+connexion.escape(data['per_num'])+' OR per_num_etu = '+connexion.escape(data['per_num']);
-			sql += ');'
-			sql += 'DELETE FROM citation WHERE per_num = '+connexion.escape(data['per_num'])+' OR per_num_valide = '+connexion.escape(data['per_num'])+' OR per_num_etu = '+connexion.escape(data['per_num'])+' ;';
-			sql += 'DELETE FROM etudiant WHERE per_num = '+connexion.escape(data['per_num'])+';';
-			// s'il n'y a pas d'erreur de connexion
-			// execution de la requête SQL           
-			connexion.query(sql, callback);
-			
-			// la connexion retourne dans le pool
-			connexion.release();
-		}
-	})
-}
-
-// Méthode qui efface toutes les données d'un salarié dont on passe l'identifiant, sauf celles contenues dans la table personne
-module.exports.deleteSalarie = function (data, callback){
-	db.getConnection(function(err,connexion){
-		if(!err){
-			var sql = ''; 
-			sql += 'DELETE FROM vote WHERE cit_num IN (';
-			sql +=			'SELECT cit_num FROM citation WHERE per_num	= '+connexion.escape(data['per_num'])+' OR per_num_valide = '+connexion.escape(data['per_num'])+' OR per_num_etu = '+connexion.escape(data['per_num']);
-			sql += ');'
-			sql += 'DELETE FROM citation WHERE per_num = '+connexion.escape(data['per_num'])+' OR per_num_valide = '+connexion.escape(data['per_num'])+' OR per_num_etu = '+connexion.escape(data['per_num'])+' ;';
-			sql += 'DELETE FROM salarie WHERE per_num = '+connexion.escape(data['per_num'])+';';
-			// s'il n'y a pas d'erreur de connexion
-			// execution de la requête SQL           
-			connexion.query(sql, callback);
-			
-			// la connexion retourne dans le pool
-			connexion.release();
-		}
-	})
-}
-
 // Méthode qui supprime toutes les informations de la personne dont on passe l'identifiant en paramètre dans l'objet data
 module.exports.deletePersonne = function (data, callback){
 	db.getConnection(function(err,connexion){
@@ -184,40 +143,6 @@ module.exports.updatePersonne = function (data, callback){
 				' ,per_mail = '+connexion.escape(data['per_mail'])+
 				' ,per_login = '+connexion.escape(data['per_login'])+
 				' ,per_pwd = '+connexion.escape(pwd_crypte)+
-				' WHERE per_num = '+connexion.escape(data['per_num'])+';'; 
-			// s'il n'y a pas d'erreur de connexion
-			// execution de la requête SQL           
-			connexion.query(sql, callback);
-			
-			// la connexion retourne dans le pool
-			connexion.release();
-		}
-	});
-}
-
-module.exports.updateEtudiant = function (data, callback){
-	db.getConnection(function(err,connexion){
-		if(!err){
-			var sql = 'UPDATE etudiant SET '+
-				' dep_num = '+connexion.escape(data['dep_num'])+
-				' ,div_num = '+connexion.escape(parseInt(data['div_num']))+
-				' WHERE per_num = '+connexion.escape(data['per_num'])+';'; 
-			// s'il n'y a pas d'erreur de connexion
-			// execution de la requête SQL           
-			connexion.query(sql, callback);
-			
-			// la connexion retourne dans le pool
-			connexion.release();
-		}
-	});
-}
-
-module.exports.updateSalaire = function (data, callback){
-	db.getConnection(function(err,connexion){
-		if(!err){
-			var sql = 'UPDATE salarie SET '+
-				' sal_telprof = '+connexion.escape(data['sal_telprof'])+
-				' ,fon_num = '+connexion.escape(data['fon_num'])+
 				' WHERE per_num = '+connexion.escape(data['per_num'])+';'; 
 			// s'il n'y a pas d'erreur de connexion
 			// execution de la requête SQL           

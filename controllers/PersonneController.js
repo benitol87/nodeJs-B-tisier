@@ -1,4 +1,3 @@
-
 var model_personne = require('../models/personne.js');
 var model_etudiant = require('../models/etudiant.js');
 var model_salarie  = require('../models/salarie.js');
@@ -9,6 +8,7 @@ var model_division = require('../models/division.js');
 var async = require('async');
 var handlebars = require('express-handlebars')
 var home_controller = require('./HomeController.js');
+var rootFolder = "personne/";
 
 
 // ////////////////////////////////////////////// L I S T E R     P E R S O N N E S
@@ -23,7 +23,7 @@ module.exports.ListerPersonne = function(request, response){
 		}
 		response.listePersonne = result;
 		response.nbPersonne = result.length;
-		response.render('listerPersonne', response);
+		response.render(rootFolder+'lister', response);
 	});
 };
 
@@ -38,7 +38,7 @@ module.exports.DetailPersonne = function(request, response){
 				return;
 		}
 		response.personne = result[0];
-		response.render('detailPersonne', response);
+		response.render(rootFolder+'detail', response);
 	});
 };
 
@@ -50,10 +50,10 @@ module.exports.AjouterPersonne = function(request, response){
 		return;
 	}
 
-	if(!request.body.nom && !request.body.annee && !request.body.telprof){
+	if(!request.body.nom && !request.body.annee && !request.body.sal_telprof){
 		// Première arrivée sur la page : infos personnes
 		response.title = 'Ajout d\'une personne';
-		response.render('ajouterPersonne', response);
+		response.render(rootFolder+'ajouter', response);
 	} else if(request.body.nom){
 		// Deuxième arrivée : redirection vers page formulaire étudiant ou salarié
 		request.session.donneesAjoutPersonne = {};
@@ -93,7 +93,7 @@ module.exports.AjouterPersonne = function(request, response){
 				function(){
 					// Fin des requetes
 					response.title = 'Ajout d\'un étudiant';
-					response.render('ajouterEtudiant', response);
+					response.render(rootFolder+'ajouterEtudiant', response);
 				}
 
 			);
@@ -114,7 +114,7 @@ module.exports.AjouterPersonne = function(request, response){
 				function(){
 					// Fin des requetes
 					response.title = 'Ajout d\'un salarié';
-					response.render('ajouterSalarie', response);
+					response.render(rootFolder+'ajouterSalarie', response);
 				}
 
 			);
@@ -124,7 +124,7 @@ module.exports.AjouterPersonne = function(request, response){
 		request.session.donneesAjoutPersonne.dep_num = request.body.dep;
 		request.session.donneesAjoutPersonne.div_num = request.body.annee;
 
-		// TODO : Ajouter personne
+		// Ajouter la personne
 		model_personne.addPersonne(request.session.donneesAjoutPersonne, function (err, result) {
             if (err) {
                 console.log(err);
@@ -140,7 +140,7 @@ module.exports.AjouterPersonne = function(request, response){
 	            };
 
 				response.title = 'Ajout d\'un étudiant';
-				response.render('ajouterEtudiant', response);
+				response.render(rootFolder+'ajouterEtudiant', response);
 	        });
 
         });
@@ -149,7 +149,7 @@ module.exports.AjouterPersonne = function(request, response){
 	} else {
 		// Troisième arrivée 2 : récupération des données du salarié
 
-		request.session.donneesAjoutPersonne.sal_telprof = request.body.telprof;
+		request.session.donneesAjoutPersonne.sal_telprof = request.body.sal_telprof;
 		request.session.donneesAjoutPersonne.fon_num = request.body.fonction;
 
 		model_personne.addPersonne(request.session.donneesAjoutPersonne, function (err, result) {
@@ -167,7 +167,7 @@ module.exports.AjouterPersonne = function(request, response){
 	            };
 	            
 				response.title = 'Ajout d\'un salarié';
-				response.render('ajouterSalarie', response);
+				response.render(rootFolder+'ajouterSalarie', response);
 	        });
 
         });
@@ -186,7 +186,7 @@ module.exports.ModifierPersonne = function(request, response){
 		return;
 	}
 
-	if(!request.body.nom && !request.body.annee && !request.body.telprof){
+	if(!request.body.nom && !request.body.annee && !request.body.sal_telprof){
 		// Première arrivée sur la page : infos personnes
 
 		var num = request.params.num;
@@ -207,7 +207,7 @@ module.exports.ModifierPersonne = function(request, response){
 		});
 
 		response.title = 'Modifier une personne';
-		response.render('modifierPersonne', response);
+		response.render(rootFolder+'modifier', response);
 	} else if(request.body.nom){
 		// Deuxième arrivée : redirection vers page formulaire étudiant ou salarié
 		// Modification des premières données
@@ -221,7 +221,7 @@ module.exports.ModifierPersonne = function(request, response){
 
 		if(request.body.categorie=="1"){
 			// Cas de l'étudiant
-			request.session.fon_num = "";
+			request.fon_num = "";
 			async.parallel([
 					function(callback){
 						model_division.getAllDivisions( function (err, result) {
@@ -248,13 +248,13 @@ module.exports.ModifierPersonne = function(request, response){
 				function(){
 					// Fin des requetes
 					response.title = 'Ajout d\'un étudiant';
-					response.render('ajouterEtudiant', response);
+					response.render(rootFolder+'ajouterEtudiant', response);
 				}
 
 			);
 		} else {
 			// Cas du salarié
-			request.session.dep_num = "";
+			request.dep_num = "";
 			async.parallel([
 					function(callback){
 						model_fonction.getAllFonctions( function (err, result) {
@@ -271,7 +271,7 @@ module.exports.ModifierPersonne = function(request, response){
 				function(){
 					// Fin des requetes
 					response.title = 'Ajout d\'un salarié';
-					response.render('ajouterSalarie', response);
+					response.render(rootFolder+'ajouterSalarie', response);
 				}
 
 			);
@@ -283,7 +283,7 @@ module.exports.ModifierPersonne = function(request, response){
 
 		if(request.session.personneModifiee.typePersonne=="salarié"){
 			// Suppression du salarié
-			model_personne.deleteSalarie(request.session.personneModifiee, function (err, result){
+			model_salarie.deleteSalarie(request.session.personneModifiee, function (err, result){
 				if (err) {
 	                console.log(err);
 	                return;
@@ -311,7 +311,7 @@ module.exports.ModifierPersonne = function(request, response){
 			});
 		} else {
 			// Mise à jour des données de l'étudiant
-			model_personne.updateEtudiant(request.session.personneModifiee, function(err, result){
+			model_etudiant.updateEtudiant(request.session.personneModifiee, function(err, result){
 				if (err) {
 	                console.log(err);
 	                return;
@@ -323,6 +323,7 @@ module.exports.ModifierPersonne = function(request, response){
 		                console.log(err);
 		                return;
 	            	}
+	            	delete request.session.personneModifiee;
 
 					response.message = "Modification effectuée.";
 					home_controller.Index(request, response);
@@ -334,12 +335,12 @@ module.exports.ModifierPersonne = function(request, response){
 	} else {
 		// Troisième arrivée 2 : récupération des données du salarié
 
-		request.session.personneModifiee.sal_telprof = request.body.telprof;
+		request.session.personneModifiee.sal_telprof = request.body.sal_telprof;
 		request.session.personneModifiee.fon_num = request.body.fonction;
 
 		if(request.session.personneModifiee.typePersonne=="étudiant"){
 			// Suppression de l'étudiant
-			model_personne.deleteEtudiant(request.session.personneModifiee, function (err, result){
+			model_etudiant.deleteEtudiant(request.session.personneModifiee, function (err, result){
 				if (err) {
 	                console.log(err);
 	                return;
@@ -366,8 +367,8 @@ module.exports.ModifierPersonne = function(request, response){
 
 			});
 		} else {
-			// Mise à jour des données de l'étudiant
-			model_personne.updateEtudiant(request.session.personneModifiee, function(err, result){
+			// Mise à jour des données du salarié
+			model_salarie.updateSalarie(request.session.personneModifiee, function(err, result){
 				if (err) {
 	                console.log(err);
 	                return;
@@ -379,6 +380,7 @@ module.exports.ModifierPersonne = function(request, response){
 		                console.log(err);
 		                return;
 	            	}
+	            	delete request.session.personneModifiee;
 
 					response.message = "Modification effectuée.";
 					home_controller.Index(request, response);
@@ -389,9 +391,6 @@ module.exports.ModifierPersonne = function(request, response){
 	}
 
 };
-
-
-
 
 module.exports.SupprimerPersonne = function(request, response){
 	if (!request.session.admin) {
