@@ -51,12 +51,18 @@
 
 {{/if}}
 
-
 <a id="manque-de-respect" class="waves-effect btn disabled">
     Se moquer ouvertement de cette personne
 </a>
 <br>
-<a href='/listerPersonne' class="waves-effect waves-light btn">
+<a href='/personne/modifier/{{personne.per_num}}' class="waves-effect waves-light cyan lighten-3 btn">
+    Modifier
+</a>
+<a href='/personne/supprimer/{{personne.per_num}}' class="waves-effect waves-light cyan lighten-3 btn">
+    Supprimer
+</a>
+<br>
+<a href='/personne/lister' class="waves-effect waves-light btn">
     <i class="mdi-hardware-keyboard-arrow-left left"></i>
     Retour
 </a>

@@ -1,4 +1,3 @@
-
 var model_personne = require('../models/personne.js');
 var model_etudiant = require('../models/etudiant.js');
 var model_salarie  = require('../models/salarie.js');
@@ -7,7 +6,9 @@ var model_departement = require('../models/departement.js');
 var model_division = require('../models/division.js');
 
 var async = require('async');
+var handlebars = require('express-handlebars')
 var home_controller = require('./HomeController.js');
+var rootFolder = "personne/";
 
 
 // ////////////////////////////////////////////// L I S T E R     P E R S O N N E S
@@ -22,7 +23,7 @@ module.exports.ListerPersonne = function(request, response){
 		}
 		response.listePersonne = result;
 		response.nbPersonne = result.length;
-		response.render('listerPersonne', response);
+		response.render(rootFolder+'lister', response);
 	});
 };
 
@@ -37,7 +38,7 @@ module.exports.DetailPersonne = function(request, response){
 				return;
 		}
 		response.personne = result[0];
-		response.render('detailPersonne', response);
+		response.render(rootFolder+'detail', response);
 	});
 };
 
@@ -49,10 +50,10 @@ module.exports.AjouterPersonne = function(request, response){
 		return;
 	}
 
-	if(!request.body.nom && !request.body.annee && !request.body.telprof){
+	if(!request.body.nom && !request.body.annee && !request.body.sal_telprof){
 		// Première arrivée sur la page : infos personnes
 		response.title = 'Ajout d\'une personne';
-		response.render('ajouterPersonne', response);
+		response.render(rootFolder+'ajouter', response);
 	} else if(request.body.nom){
 		// Deuxième arrivée : redirection vers page formulaire étudiant ou salarié
 		request.session.donneesAjoutPersonne = {};
@@ -92,7 +93,7 @@ module.exports.AjouterPersonne = function(request, response){
 				function(){
 					// Fin des requetes
 					response.title = 'Ajout d\'un étudiant';
-					response.render('ajouterEtudiant', response);
+					response.render(rootFolder+'ajouterEtudiant', response);
 				}
 
 			);
@@ -113,7 +114,7 @@ module.exports.AjouterPersonne = function(request, response){
 				function(){
 					// Fin des requetes
 					response.title = 'Ajout d\'un salarié';
-					response.render('ajouterSalarie', response);
+					response.render(rootFolder+'ajouterSalarie', response);
 				}
 
 			);
@@ -123,7 +124,7 @@ module.exports.AjouterPersonne = function(request, response){
 		request.session.donneesAjoutPersonne.dep_num = request.body.dep;
 		request.session.donneesAjoutPersonne.div_num = request.body.annee;
 
-		// TODO : Ajouter personne
+		// Ajouter la personne
 		model_personne.addPersonne(request.session.donneesAjoutPersonne, function (err, result) {
             if (err) {
                 console.log(err);
@@ -139,7 +140,7 @@ module.exports.AjouterPersonne = function(request, response){
 	            };
 
 				response.title = 'Ajout d\'un étudiant';
-				response.render('ajouterEtudiant', response);
+				response.render(rootFolder+'ajouterEtudiant', response);
 	        });
 
         });
@@ -148,10 +149,9 @@ module.exports.AjouterPersonne = function(request, response){
 	} else {
 		// Troisième arrivée 2 : récupération des données du salarié
 
-		request.session.donneesAjoutPersonne.sal_telprof = request.body.telprof;
+		request.session.donneesAjoutPersonne.sal_telprof = request.body.sal_telprof;
 		request.session.donneesAjoutPersonne.fon_num = request.body.fonction;
 
-		// TODO : Ajouter personne
 		model_personne.addPersonne(request.session.donneesAjoutPersonne, function (err, result) {
             if (err) {
                 console.log(err);
@@ -167,12 +167,249 @@ module.exports.AjouterPersonne = function(request, response){
 	            };
 	            
 				response.title = 'Ajout d\'un salarié';
-				response.render('ajouterSalarie', response);
+				response.render(rootFolder+'ajouterSalarie', response);
 	        });
 
         });
 
 
 	}
+
+};
+
+
+module.exports.ModifierPersonne = function(request, response){
+	// Vérification des droits admin
+	if (!request.session.admin) {
+        response.message = "Seul un admin peut modifier une personne.";
+		home_controller.Index(request, response);
+		return;
+	}
+
+	if(!request.body.nom && !request.body.annee && !request.body.sal_telprof){
+		// Première arrivée sur la page : infos personnes
+
+		var num = request.params.num;
+		model_personne.getDetailPersonne(num, function (err, result) {
+			if (err) {
+					// gestion de l'erreur
+					console.log(err);
+					return;
+			}
+			request.session.personneModifiee = result[0];
+
+			// Récupération du type de personne avant la modification
+			if(request.session.personneModifiee.dep_num){
+				request.session.personneModifiee.typePersonne="étudiant";
+			}else {
+				request.session.personneModifiee.typePersonne="salarié";
+			}
+		});
+
+		response.title = 'Modifier une personne';
+		response.render(rootFolder+'modifier', response);
+	} else if(request.body.nom){
+		// Deuxième arrivée : redirection vers page formulaire étudiant ou salarié
+		// Modification des premières données
+		request.session.personneModifiee.per_nom = request.body.nom;
+		request.session.personneModifiee.per_prenom = request.body.prenom;
+		request.session.personneModifiee.per_tel = request.body.tel;
+		request.session.personneModifiee.per_mail = request.body.mail;
+		request.session.personneModifiee.per_login = request.body.login;
+		request.session.personneModifiee.per_pwd = request.body.password;
+		request.session.personneModifiee.per_admin = 0;
+
+		if(request.body.categorie=="1"){
+			// Cas de l'étudiant
+			request.fon_num = "";
+			async.parallel([
+					function(callback){
+						model_division.getAllDivisions( function (err, result) {
+							if (err) {
+									// gestion de l'erreur
+									console.log(err);
+									return;
+							}
+							response.listeDivision = result;
+							callback();
+						});
+					},function(callback){
+						model_departement.getAllDepartements( function (err, result) {
+							if (err) {
+									// gestion de l'erreur
+									console.log(err);
+									return;
+							}
+							response.listeDepartement = result;
+							callback();
+						});
+					}
+				],
+				function(){
+					// Fin des requetes
+					response.title = 'Ajout d\'un étudiant';
+					response.render(rootFolder+'ajouterEtudiant', response);
+				}
+
+			);
+		} else {
+			// Cas du salarié
+			request.dep_num = "";
+			async.parallel([
+					function(callback){
+						model_fonction.getAllFonctions( function (err, result) {
+							if (err) {
+									// gestion de l'erreur
+									console.log(err);
+									return;
+							}
+							response.listeFonction = result;
+							callback();
+						});
+					}
+				],
+				function(){
+					// Fin des requetes
+					response.title = 'Ajout d\'un salarié';
+					response.render(rootFolder+'ajouterSalarie', response);
+				}
+
+			);
+		}
+	} else if(request.body.annee){
+		// Troisième arrivée 1 : récupération des données de l'étudiant
+		request.session.personneModifiee.dep_num = request.body.dep;
+		request.session.personneModifiee.div_num = request.body.annee;
+
+		if(request.session.personneModifiee.typePersonne=="salarié"){
+			// Suppression du salarié
+			model_salarie.deleteSalarie(request.session.personneModifiee, function (err, result){
+				if (err) {
+	                console.log(err);
+	                return;
+            	}
+
+            	// Création de l'étudiant
+            	model_etudiant.addEtudiant(request.session.personneModifiee, function(err, result){
+					if (err) {
+		                console.log(err);
+		                return;
+	            	}
+	            	
+	            	// Mise à jour des données de la personne
+	            	model_personne.updatePersonne(request.session.personneModifiee, function(err, result){
+						if (err) {
+			                console.log(err);
+			                return;
+		            	}
+
+						response.message = "Modification effectuée.";
+						home_controller.Index(request, response);
+	            	});
+            	});
+
+			});
+		} else {
+			// Mise à jour des données de l'étudiant
+			model_etudiant.updateEtudiant(request.session.personneModifiee, function(err, result){
+				if (err) {
+	                console.log(err);
+	                return;
+            	}
+
+            	// Mise à jour des données de la personne
+				model_personne.updatePersonne(request.session.personneModifiee, function(err, result){
+					if (err) {
+		                console.log(err);
+		                return;
+	            	}
+	            	delete request.session.personneModifiee;
+
+					response.message = "Modification effectuée.";
+					home_controller.Index(request, response);
+	        	});
+        	});
+		}
+
+
+	} else {
+		// Troisième arrivée 2 : récupération des données du salarié
+
+		request.session.personneModifiee.sal_telprof = request.body.sal_telprof;
+		request.session.personneModifiee.fon_num = request.body.fonction;
+
+		if(request.session.personneModifiee.typePersonne=="étudiant"){
+			// Suppression de l'étudiant
+			model_etudiant.deleteEtudiant(request.session.personneModifiee, function (err, result){
+				if (err) {
+	                console.log(err);
+	                return;
+            	}
+
+            	// Création du salarié
+            	model_salarie.addSalarie(request.session.personneModifiee, function(err, result){
+					if (err) {
+		                console.log(err);
+		                return;
+	            	}
+	            	
+	            	// Mise à jour des données de la personne
+	            	model_personne.updatePersonne(request.session.personneModifiee, function(err, result){
+						if (err) {
+			                console.log(err);
+			                return;
+		            	}
+
+						response.message = "Modification effectuée.";
+						home_controller.Index(request, response);
+	            	});
+            	});
+
+			});
+		} else {
+			// Mise à jour des données du salarié
+			model_salarie.updateSalarie(request.session.personneModifiee, function(err, result){
+				if (err) {
+	                console.log(err);
+	                return;
+            	}
+
+            	// Mise à jour des données de la personne
+				model_personne.updatePersonne(request.session.personneModifiee, function(err, result){
+					if (err) {
+		                console.log(err);
+		                return;
+	            	}
+	            	delete request.session.personneModifiee;
+
+					response.message = "Modification effectuée.";
+					home_controller.Index(request, response);
+	        	});
+        	});
+		}
+
+	}
+
+};
+
+module.exports.SupprimerPersonne = function(request, response){
+	if (!request.session.admin) {
+        response.message = "Seul un admin peut supprimer une personne.";
+		home_controller.Index(request, response);
+		return;
+	}
+
+	obj = {};
+	obj.per_num = request.params.num;
+
+	model_personne.deletePersonne(obj, function (err, result) {
+        if (err) {
+            console.log(err);
+            return;
+        };
+
+        response.message = "Suppression effectuée.";
+		home_controller.Index(request, response);
+    });
 
 };

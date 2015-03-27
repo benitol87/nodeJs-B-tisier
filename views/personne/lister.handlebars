@@ -1,5 +1,5 @@
 <div class="card-panel cyan lighten-3">
-    Il y a actuellement {{nbPersonne}} personnes enregistrées
+    Il y a actuellement {{ nbPersonne }} personnes enregistrées
 </div>
 
 <table class="centered hoverable responsive-table">
@@ -14,7 +14,11 @@
     <tbody>
     	{{#each listePersonne}}
     	<tr>
-    		<td><a href='/detailPersonne/{{this.per_num}}' class="waves-effect waves-red btn-flat"><span class="cyan-text text-draken-1">{{this.per_num}}</span></a></td>
+    		<td>
+                <a href='/personne/detail/{{this.per_num}}' class="waves-effect waves-red btn-flat">
+                    <span class="cyan-text text-draken-1">{{this.per_num}}</span>
+                </a>
+            </td>
     		<td>{{this.per_nom}}</td>
     		<td>{{this.per_prenom}}</td></a>
     	</tr>

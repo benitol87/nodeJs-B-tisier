@@ -12,7 +12,8 @@ var pool  = mysql.createPool({
   host     : 'localhost',
   user     : 'bd',
   password : 'bede',
-  database : 'betisier'
+  database : 'betisier',
+  multipleStatements : true
 });
 
 module.exports.getConnection = function(callback) {

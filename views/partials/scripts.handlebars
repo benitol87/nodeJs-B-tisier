@@ -1,12 +1,5 @@
 <!-- Scripts base -->
 
-<!--Import jQuery before materialize.js-->
-<!--<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>-->
-<script type="text/javascript" src="/bower_components/materialize/bin/materialize.js"></script>
-
-
-
-
 <script type="text/javascript">
 $(document).ready(function() {
     /************
@@ -36,7 +29,6 @@ $(document).ready(function() {
      ***************/
     $(document).ready(function() {
         $('select').material_select();      // <select>
-        $('.modal-trigger').leanModal();    // modals initalisation
 
         $('#toggle-nav').on('click', function() {
             $('#nav-mobile').slideToggle('slow');

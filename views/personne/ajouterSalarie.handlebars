@@ -1,13 +1,13 @@
 {{#if listeFonction}}
 	<form action="#" method="POST">
 		<div>
-			<label for="telprof">Téléphone professionnel </label>
-			<input type="text" name="telprof" required/>
+			<label for="sal_telprof">Téléphone professionnel </label>
+			<input type="text" name="sal_telprof" required  {{#if session.personneModifiee}}value="{{session.personneModifiee.sal_telprof}}"{{/if}}/>
 		</div>
 		<div>
 			<label for="fonction">Fonction </label>
 			<select name="fonction">
-			{{#each listeFonction}} <!--  parcours de listeVille -->
+			{{#each listeFonction}}
 				<option value="{{this.fon_num}}">{{this.fon_libelle}}</option>
 			{{/each}}
 			</select>
