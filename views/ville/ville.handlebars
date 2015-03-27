@@ -1,9 +1,4 @@
-{{> enTete}}
-{{> menu}}
-
 <div id="show">
-    <h1>Résumé de la ville</h1>
-
     <p>Identifiant : <b>{{ ville.vil_num }}</b></p>
     <p>Nom de la ville : <b>{{ ville.vil_nom }}</b></p>
 
@@ -15,8 +10,6 @@
 
 
 <div id="update">
-    <h1>Modification de la ville</h1>
-
     <form action="#" method="post">
         <input type="hidden" name="vil_num" value="{{ ville.vil_num }}">
 

@@ -1,29 +1,33 @@
-{{> enTete}}
-{{> menu}}
-<h1>Pour vous connecter</h1>
+<h2>Pour vous connecter</h2>
 
 <form action='/connect' method='POST' id='form'>
-	<div>
-		<label for='login'>Nom d'utilisateur</label>
-		<input type='text' name='login' id='login' required/>
-	</div>
+    <div class="row">
+        <div class="input-field col s12 l6">
+            <i class="mdi-social-person prefix"></i>
+            <input id='login' type='text' name='login' class="validate" required/>
+            <label for='login'>Nom d'utilisateur</label>
+        </div>
+        <div class="input-field col s12 l6">
+            <i class="mdi-action-verified-user prefix"></i>
+            <input id='pass' type='password' name='pass' class="validate" required/>
+            <label for='pass'>Mot de passe</label>
+        </div>
+    </div>
 
-	<div>
-		<label for='pass'>Mot de passe</label>
-		<input type='password' name='pass' id='pass' required/>
-	</div>
-
-	<div>
-		<img id='image1'/>
-		+
-		<img id='image2'>
-		=
-		<input type='text' name='nombre' id='nombre'/>
+	<div class="row">
+		<div class="col s12 m2 l4 offset-l1">
+            <p class="center">
+                <img id='image1'/> + <img id='image2'> =
+            </p>
+        </div>
+        <div class="input-field col s12 m10 l4">
+            <input id='nombre' type='number' name='nombre' class="validate" required/>
+            <label for='nombre'>Total</label>
+        </div>
 	</div>
 
 	<div id='error'></div>
-
-	<input type='submit' value='Valider'/>
+	<button type='submit' class="waves-effect waves-light purple lighten-3 btn-flat">Valider</button>
 </form>
 
 <script type="text/javascript" src="/js/connect.js"></script>

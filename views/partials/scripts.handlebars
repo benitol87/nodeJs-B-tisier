@@ -1,0 +1,46 @@
+<!-- Scripts base -->
+
+<!--Import jQuery before materialize.js-->
+<!--<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>-->
+<script type="text/javascript" src="/bower_components/materialize/bin/materialize.js"></script>
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+    /************
+     * Message d'accueil
+     ************/
+    var messageAccueil1 = "Hihihiih ! ^^";
+    var messageAccueil2 = "Mddrrrrr c'est trop rigolo";
+    var message = messageAccueil1;
+
+    $('#click-accueil').on('click', function() {
+        toast(message, 1000);
+        message = (message === messageAccueil1) ? messageAccueil2 : messageAccueil1;
+    });
+
+    /***************
+     * Manquage de respect
+     ***************/
+    var nb_manqueDeRespect = 0;
+
+    $('#manque-de-respect').on('click', function() {
+        nb_manqueDeRespect += 1;
+        toast('Manquage de respect : ' + nb_manqueDeRespect + '<i class="mdi-image-tag-faces right"></i>', 2000);
+    });
+
+    /***************
+     * Initialisations
+     ***************/
+    $(document).ready(function() {
+        $('select').material_select();      // <select>
+        $('.modal-trigger').leanModal();    // modals initalisation
+
+        $('#toggle-nav').on('click', function() {
+            $('#nav-mobile').slideToggle('slow');
+        });
+    });
+});
+</script>

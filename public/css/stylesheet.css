@@ -1,4 +1,4 @@
-
+/*
 a {
     color: #222222;
     text-decoration: none;
@@ -169,4 +169,120 @@ h1 {
 
 .list-unstyled {
     list-style: none;
+}*/
+
+
+
+/**************************************/
+/*
+ * Materialize.css style customization
+ */
+/**************************************/
+
+#page {
+    min-height: 380px;
+    background-color: #fff;
+}
+
+@media only screen and (min-width: 601px) {
+    #page, #header, footer {
+        padding-left: 240px;
+    }
+}
+
+footer .row {
+    margin: auto;
+}
+
+table .btn,
+table .btn-large,
+table .btn-flat {
+    text-transform: none;
+}
+
+table.hoverable tbody tr:hover {
+    background-color: #e2e2e2;
+}
+
+a.button-collapse.top-nav.full {
+    line-height: 122px;
+}
+
+a.button-collapse.top-nav {
+    position: absolute;
+    left: 7.5%;
+    top: 0px;
+    float: none;
+    margin-left: 1.5rem;
+    color: rgb(255, 255, 255);
+    font-size: 32px;
+    z-index: 2;
+}
+
+a:active,
+a:hover {
+    outline: 0px;
+}
+
+/**********************
+ * Barre de navigation
+ **********************/
+
+nav.top-nav {
+    height: 122px;
+}
+
+nav.top-nav div.page-connexion {
+    line-height: 122px;
+    font-size: 16px;
+}
+
+nav.top-nav div.page-connexion-icon {
+    line-height: 135px;
+}
+
+nav.top-nav div.page-title {
+    line-height: 122px;
+    font-size: 46px;
+}
+
+ul.side-nav.fixed ul.collapsible-accordion {
+    background-color: #fff;
+}
+
+ul.side-nav.fixed li {
+    line-height: 44px;
+}
+
+ul.side-nav.fixed li.bold > a {
+    font-weight: bold;
+}
+
+ul.side-nav.fixed li a {
+    font-size: 13px;
+}
+
+ul.side-nav.fixed li:hover,
+ul.side-nav.fixed li.active {
+    background-color: rgba(0, 0, 0, .08);
+}
+
+ul.side-nav.fixed {
+    overflow: hidden;
+}
+
+/**********************
+ * Logo
+ **********************/
+
+ul.side-nav.fixed li.logo {
+    text-align: center;
+    margin-top: 32px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #ddd;
+}
+
+#logo-container {
+    height: 57px;
+    margin-bottom: 32px;
 }

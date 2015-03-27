@@ -1,33 +1,47 @@
-<!--   Affichage du menu de l'application  -->
-<!--   Contient principalement du HTML  -->
-<!--   M A I S   aussi du code handlebars (tests, affichages)  -->
-
-
-
-<div id="corps">
-	<div id="menu">
-		<div id="menuInt">
-
-		<p><a href="/"><img class="menuImage" src="/image/accueil.gif" alt="Accueil"/>Accueil</a></p>
-		<p><img class="menuImage" src="/image/personne.png" alt="Personne"/>Personne</p>
-		<ul>
-			<li><a href="/listerPersonne">Personnes</a></li>
-			<li><a href="/ajouterPersonne">Ajouter</a></li>
-		</ul>
-
-		<p><img class="menuImage" src="/image/citation.gif" alt="Citation"/>Citation</p>
-		<ul>
-			<li><a href="/citations">Citations</a></li>
-			<li><a href="/citations/rechercher">Rechercher</a></li>
-			<li><a href="/citations/ajouter">Ajouter</a></li>
-		</ul>
-		<p><img class="menuImage" src="/image/ville.png"  alt="Ville"/>Ville</p>
-		<ul>
-			<li><a href="/villes">Villes</a></li>
-			<li><a href="/villes/ajouter">Ajouter</a></li>
-		</ul>
-	</div>
+<div class="container">
+    <a href="#" data-activates="nav-mobile" id="toggle-nav" class="button-collapse top-nav full"><i class="mdi-navigation-menu"></i></a>
 </div>
 
-<div id="texte">
-
+<ul id="nav-mobile" class="side-nav fixed">
+    <li class="logo">
+        <a id="logo-container" href="/" class="brand-logo">
+            {{#if session.login}}
+                <img src="/image/smile.png" alt="Logo bêtisier IUT" title="Logo bêtisier IUT Limousin" class="img-responsive" width="75" height="75"/>
+            {{else}}
+                <img src="/image/lebetisier.png" alt="Logo bêtisier IUT" title="Logo bêtisier IUT Limousin" class="responsive-img" />
+            {{/if}}
+        </a>
+    </li>
+    <li class="bold">
+        <a href="/" class="waves-effect waves-teal">Accueil</a>
+    </li>
+    <li class="no-padding">
+      <ul class="collapsible collapsible-accordion">
+        <li class="bold"><a class="collapsible-header  waves-effect waves-teal">Personne</a>
+          <div class="collapsible-body">
+            <ul>
+                <li><a href="/listerPersonne">Personnes</a></li>
+                <li><a href="/ajouterPersonne">Ajouter</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="bold"><a class="collapsible-header  waves-effect waves-teal">Citation</a>
+          <div class="collapsible-body">
+            <ul>
+                <li><a href="/citations">Citations</a></li>
+                <li><a href="/citations/rechercher">Rechercher</a></li>
+                <li><a href="/citations/ajouter">Ajouter</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="bold"><a class="collapsible-header  waves-effect waves-teal">Ville</a>
+          <div class="collapsible-body">
+            <ul>
+                <li><a href="/villes">Villes</a></li>
+                <li><a href="/villes/ajouter">Ajouter</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </li>
+</ul>

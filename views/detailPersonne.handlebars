@@ -1,23 +1,25 @@
-{{> enTete}}
-{{> menu}}
-
 {{#if personne.dep_nom}}
 	<h1>Détail sur l'étudiant {{personne.per_nom}}</h1>
-	<table>
-		<tr>
-			<td>Prénom</td>
-			<td>Mail</td>
-			<td>Tel</td>
-			<td>Département</td>
-			<td>Ville</td>
-		</tr>
-		<tr>
-			<td>{{personne.per_prenom}}</td>
-			<td>{{personne.per_mail}}</td>
-			<td>{{personne.per_tel}}</td>
-			<td>{{personne.dep_nom}}</td>
-			<td>{{personne.vil_nom}}</td>
-		</tr>
+	<table class="centered responsive-table">
+        <thead>
+    		<tr>
+    			<th>Prénom</th>
+    			<th>Mail</th>
+    			<th>Tel</th>
+    			<th>Département</th>
+    			<th>Ville</th>
+    		</tr>
+        </thead>
+
+        <tbody>
+    		<tr>
+    			<td>{{personne.per_prenom}}</td>
+    			<td>{{personne.per_mail}}</td>
+    			<td>{{personne.per_tel}}</td>
+    			<td>{{personne.dep_nom}}</td>
+    			<td>{{personne.vil_nom}}</td>
+    		</tr>
+        </tbody>
 	</table>
 
 {{/if}}
@@ -25,23 +27,36 @@
 
 {{#if personne.fon_libelle}}
 	<h1>Détail sur le salarié {{personne.per_nom}}</h1>
-	<table>
-		<tr>
-			<td>Prénom</td>
-			<td>Mail</td>
-			<td>Tel</td>
-			<td>Tel pro</td>
-			<td>Fonction</td>
-		</tr>
-		<tr>
-			<td>{{personne.per_prenom}}</td>
-			<td>{{personne.per_mail}}</td>
-			<td>{{personne.per_tel}}</td>
-			<td>{{personne.sal_telprof}}</td>
-			<td>{{personne.fon_libelle}}</td>
-		</tr>
+	<table class="centered responsive-table">
+        <thead>
+            <tr>
+                <th>Prénom</th>
+                <th>Mail</th>
+                <th>Tel</th>
+                <th>Tel pro</th>
+                <th>Fonction</th>
+            </tr>
+        </thead>
+
+        <tbody>
+    		<tr>
+    			<td>{{personne.per_prenom}}</td>
+    			<td>{{personne.per_mail}}</td>
+    			<td>{{personne.per_tel}}</td>
+    			<td>{{personne.sal_telprof}}</td>
+    			<td>{{personne.fon_libelle}}</td>
+    		</tr>
+        </tbody>
 	</table>
 
 {{/if}}
 
-<a href='/listerPersonne'><input type='button' value='Retour'/></a>
+
+<a id="manque-de-respect" class="waves-effect btn disabled">
+    Se moquer ouvertement de cette personne
+</a>
+<br>
+<a href='/listerPersonne' class="waves-effect waves-light btn">
+    <i class="mdi-hardware-keyboard-arrow-left left"></i>
+    Retour
+</a>

@@ -1,25 +1,31 @@
-{{> enTete}}
-{{> menu}}
- <h1>Liste des personnes enregistrées</h1>
+<div class="card-panel cyan lighten-3">
+    Il y a actuellement {{nbPersonne}} personnes enregistrées
+</div>
 
-<p>Il y a actuellement {{nbPersonne}} personnes enregistrées</p>
+<table class="centered hoverable responsive-table">
+    <thead>
+    	<tr>
+    		<th>Numéro</th>
+    		<th>Nom</th>
+    		<th>Prénom</th>
+    	</tr>
+    </thead>
 
-<table>
-	<tr>
-		<th>Numéro</th>
-		<th>Nom</th>
-		<th>Prénom</th>
-	</tr>                               
-	{{#each listePersonne}} <!--  parcours de listePersonne -->
-	<tr>
-		<td><a href='/detailPersonne/{{this.per_num}}'>{{this.per_num}}</a></td>
-		<td>{{this.per_nom}}</td>
-		<td>{{this.per_prenom}}</td>
-	</tr>
-	{{else}}
-		<td>-</td>
-		<td>-</td>
-		<td>-</td>
-	{{/each}}
+    <tbody>
+    	{{#each listePersonne}}
+    	<tr>
+    		<td><a href='/detailPersonne/{{this.per_num}}' class="waves-effect waves-red btn-flat"><span class="cyan-text text-draken-1">{{this.per_num}}</span></a></td>
+    		<td>{{this.per_nom}}</td>
+    		<td>{{this.per_prenom}}</td></a>
+    	</tr>
+    	{{else}}
+        <tr>
+    		<td>-</td>
+    		<td>-</td>
+    		<td>-</td>
+        </tr>
+    	{{/each}}
+    </tbody>
 </table>
+
 <p>Cliquez sur le numéro de la personne pour obtenir plus d'informations.</p>

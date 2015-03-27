@@ -1,0 +1,23 @@
+{
+  "name": "nodeJs-B-tisier",
+  "version": "1.0.0",
+  "authors": [
+    "guillaume chanson <guillaumesk87@gmail.com>",
+    "benoît leroy <guill@gmail.com>"
+  ],
+  "main": "app.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "scripts": {
+    "postinstall": "bower install",
+    "prestart": "npm install",
+    "start": "node app"
+  },
+  "dependencies": {
+    "jquery": "~2.1",
+    "materialize": "~0.95.0"
+  }
+}

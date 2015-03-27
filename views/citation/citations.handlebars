@@ -1,59 +1,53 @@
-{{> enTete}}
-{{> menu}}
- <h1>Liste des citations déposées</h1>
+<div class="card-panel green lighten-2">
+    Il y a actuellement <b>{{ nbCitation }}</b> citations enregistrées
+</div>
 
-<p>Il y a actuellement <b>{{ nbCitation }}</b> citations enregistrées</p>
+<table class="centered hoverable responsive-table">
+    <thead>
+       <tr>
+         <th>Nom de l'enseignant</th>
+         <th>Libellé</th>
+         <th>Date</th>
+         <th>Moyenne des notes</th>
+       </tr>
+    </thead>
 
+    <tbody>
+        {{#if is_authorized}}
+            {{#each citations}}
+                <tr>
+                    <td>{{ this.per_nom }}</td>
+                    <td><a href="/citation/{{ this.cit_num }}" class="waves-effect waves-green btn-flat"><span class="blue-text text-lighten-1">{{ this.cit_libelle }}</span></a></td>
+                    <td>{{ this.cit_date }}</td>
+                    {{#if this.moyenne }}
+                        <td>{{ this.moyenne }}</td>
+                    {{else}}
+                        <td>Pas encore évaluée</td>
+                    {{/if}}
+                </tr>
+            {{/each}}
+        {{else}}
+            {{#each citations}}
+                <tr>
+                    <td>{{ this.per_nom }}</td>
+                    <td>{{ this.cit_libelle }}</td>
+                    <td>{{ this.cit_date }}</td>
+                    {{#if this.moyenne }}
+                        <td>{{ this.moyenne }}</td>
+                    {{else}}
+                        <td>Pas encore évaluée</td>
+                    {{/if}}
+                </tr>
+            {{/each}}
+        {{/if}}
+    </tbody>
+</table>
 
 {{#if is_authorized}}
-  <table>
-       <tr>
-         <th>Nom de l'enseignant</th>
-         <th>Libellé</th>
-         <th>Date</th>
-         <th>Moyenne des notes</th>
-       </tr>
-      {{#each citations}} <!--  parcours de listeCitation -->
-      <tr>
-          <td>{{ this.per_nom }}</td>
-          <td><a href="/citation/{{ this.cit_num }}">{{ this.cit_libelle }}</a></td>
-          <td>{{ this.cit_date }}</td>
-          {{#if this.moyenne }}
-            <td>{{ this.moyenne }}</td>
-          {{else}}
-            <td>Pas encore évaluée</td>
-          {{/if}}
-      </tr>
-      {{/each}}
-  </table>
-
-  <p>Cliquez sur le nom d'une citation pour la modifier.</p>
-  {{#if personne.per_admin}}
-    <a href="/citations/gestion"><button>Gérer les citations (valider / supprimer)</button></a>
-  {{/if}}
-
+    <p>Cliquez sur le nom d'une citation pour la modifier.</p>
+    {{#if personne.per_admin}}
+        <a href="/citations/gestion" class="waves-effect waves-light btn">Gérer les citations (valider / supprimer)</a>
+    {{/if}}
 {{else}}
-  <table>
-       <tr>
-         <th>Nom de l'enseignant</th>
-         <th>Libellé</th>
-         <th>Date</th>
-         <th>Moyenne des notes</th>
-       </tr>
-      {{#each citations}} <!--  parcours de listeCitation -->
-      <tr>
-          <td>{{ this.per_nom }}</td>
-          <td>{{ this.cit_libelle }}</td>
-          <td>{{ this.cit_date }}</td>
-          {{#if this.moyenne }}
-            <td>{{ this.moyenne }}</td>
-          {{else}}
-            <td>Pas encore évaluée</td>
-          {{/if}}
-      </tr>
-      {{/each}}
-   </table>
-
-  <p>Connectez-vous en tant qu'étudiant pour ajouter et modifier des citations.</p>
-
+    <p>Connectez-vous en tant qu'étudiant pour ajouter et modifier des citations.</p>
 {{/if}}

@@ -1,12 +1,16 @@
-{{> enTete}}
-{{> menu}}
 
-{{#if message}}
-    <p>{{ message }}</p>
-{{/if}}
+<div class="section">
+    {{#if message}}
+        <div class="card-panel teal lighten-3">{{ message }}</div>
+    {{/if}}
 
-{{#if session.login}}
-<img class="centreImage" src="/image/logo.gif" alt="Covoiturage IUT" title="Covoiturage IUT Limousin" />
-{{else}}
-<img class="centreImage" src="/image/logoNonConnecte.gif" alt="Covoiturage IUT" title="Covoiturage IUT Limousin" />
-{{/if}}
+    {{#if session.login}}
+        <a id="click-accueil">
+            <img class="responsive-img" src="/image/logo.gif" alt="Covoiturage IUT" title="Covoiturage IUT Limousin" />
+        </a>
+        <p class="center">T'oseras pas cliquer sur moi hihi ! Mdrr</p>
+    {{else}}
+        <img class="responsive-img" src="/image/logoNonConnecte.gif" alt="Covoiturage IUT" title="Covoiturage IUT Limousin" />
+        <p class="center">Le bêtisier de l'IUT.<br />Partagez les meilleures perles !!!</p>
+    {{/if}}
+</div>

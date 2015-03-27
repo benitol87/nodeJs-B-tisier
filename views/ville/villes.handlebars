@@ -1,22 +1,20 @@
-{{> enTete}} <!--   inclusion des vues partielles  -->
-{{> menu}} <!--   c'est le code HTML qui se répéte pour chaque page  -->
-<!--   mais, il peut lui aussi contenir du code handlebars (tests par exemple)  -->
+<div class="card-panel lime lighten-2">
+    Il y a actuellement {{nbVille}} villes enregistrées
+</div>
+<table class="centered hoverable responsive-table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+        </tr>
+    </thead>
 
-<h1>Liste des villes enregistrées</h1>
-<p>Il y a actuellement {{nbVille}} villes enregistrées</p>
-
-<table>
-    <tr>
-        <th>Numéro</th>
-        <th>Nom</th>
-    </tr>
- {{#each listeVille}} <!--  parcours de listeVille -->
-    <tr>
-        <td><a href="/ville/{{this.vil_num}}">{{this.vil_num}}</a></td>
-        <td>{{this.vil_nom}}</td>
-    </tr>
- {{/each}}
+    <tbody>
+        {{#each listeVille}} <!--  parcours de listeVille -->
+        <tr>
+            <td><a href='/ville/{{this.vil_num}}' class="waves-effect waves-drak btn-flat"><span class="lime-text text-darken-2">{{this.vil_nom}}</span></a></td>
+        </tr>
+        {{/each}}
+    </tbody>
 </table>
-
 
 <p>Cliquez sur le numéro d'une ville pour voir les détails, la modifier, ou la supprimer.</p>

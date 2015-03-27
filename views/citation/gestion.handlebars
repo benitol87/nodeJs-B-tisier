@@ -1,50 +1,59 @@
-{{> enTete}}
-{{> menu}}
- <h1>Liste des citations déposées</h1>
+<div class="card-panel green lighten-2">
+    Il y a actuellement <b>{{ nbCitation }}</b> citations validées
+</div>
+<table class="centered hoverable responsive-table">
+    <thead>
+        <tr>
+            <th>Nom de l'enseignant</th>
+            <th>Libellé</th>
+            <th>Date</th>
+            <th>Moyenne des notes</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
 
-
-<p>Il y a actuellement <b>{{ nbCitation }}</b> citations validées</p>
-<table>
-    <tr>
-        <th>Nom de l'enseignant</th>
-        <th>Libellé</th>
-        <th>Date</th>
-        <th>Moyenne des notes</th>
-        <th>Actions</th>
-    </tr>
-    {{#each citations}} <!--  parcours de listeCitation -->
-    <tr>
-        <td>{{ this.per_nom }}</td>
-        <td><a href="/citation/{{ this.cit_num }}">{{ this.cit_libelle }}</a></td>
-        <td>{{ this.cit_date }}</td>
-        <td>{{ this.moyenne }}</td>
-        <td>
-            <a href="/citation/{{ this.cit_num }}/supprimer"><button>Supprimer</button></a>
-        </td>
-    </tr>
-    {{/each}}
+    <tbody>
+        {{#each citations}} <!--  parcours de listeCitation -->
+        <tr>
+            <td>{{ this.per_nom }}</td>
+            <td><a href="/citation/{{ this.cit_num }}">{{ this.cit_libelle }}</a></td>
+            <td>{{ this.cit_date }}</td>
+            <td>{{ this.moyenne }}</td>
+            <td>
+                <a href="/citation/{{ this.cit_num }}/supprimer">Supprimer</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
 </table>
 
 
-<p>Il y a actuellement <b>{{ nbCitation_invalides }}</b> citations à valider</p>
-<table>
-    <tr>
-        <th>Nom de l'enseignant</th>
-        <th>Libellé</th>
-        <th>Date</th>
-        <th>Moyenne des notes</th>
-        <th>Actions</th>
-    </tr>
-    {{#each citations_invalides}} <!--  parcours de listeCitation -->
-    <tr>
-        <td>{{ this.per_nom }}</td>
-        <td><a href="/citation/{{ this.cit_num }}">{{ this.cit_libelle }}</a></td>
-        <td>{{ this.cit_date }}</td>
-        <td>{{ this.moyenne }}</td>
-        <td>
-            <a href="/citation/{{ this.cit_num }}/valider"><button>Valider</button></a>
-            <a href="/citation/{{ this.cit_num }}/supprimer"><button>Supprimer</button></a>
-        </td>
-    </tr>
-    {{/each}}
+<div class="card-panel green lighten-2">
+    Il y a actuellement <b>{{ nbCitation_invalides }}</b> citations en attente
+</div>
+<table class="centered hoverable responsive-table">
+    <thead>
+        <tr>
+            <th>Nom de l'enseignant</th>
+            <th>Libellé</th>
+            <th>Date</th>
+            <th>Moyenne des notes</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{#each citations_invalides}} <!--  parcours de listeCitation -->
+        <tr>
+            <td>{{ this.per_nom }}</td>
+            <td><a href="/citation/{{ this.cit_num }}">{{ this.cit_libelle }}</a></td>
+            <td>{{ this.cit_date }}</td>
+            <td>{{ this.moyenne }}</td>
+            <td>
+                <a href="/citation/{{ this.cit_num }}/valider">Valider</a>
+                <a href="/citation/{{ this.cit_num }}/supprimer">Supprimer</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
 </table>

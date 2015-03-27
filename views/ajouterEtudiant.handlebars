@@ -1,13 +1,9 @@
-{{> enTete}}
-{{> menu}}	
-<h1>Ajouter un étudiant</h1>
-
 {{#if listeDivision}}
 	<form action="#" method="POST">
 		<div>
 			<label for="annee">Année </label>
 			<select name="annee">
-			{{#each listeDivision}} 
+			{{#each listeDivision}}
 				<option value="{{this.div_num}}">{{this.div_nom}}</option>
 			{{/each}}
 			</select>
@@ -15,12 +11,12 @@
 		<div>
 			<label for="dep">Département </label>
 			<select name="dep">
-			{{#each listeDepartement}} 
+			{{#each listeDepartement}}
 				<option value="{{this.dep_num}}">{{this.dep_nom}}</option>
 			{{/each}}
 			</select>
 		</div>
-		<input type="submit" value="Valider"/>
+		<button type="submit" class="waves-effect waves-light lime darken-1 btn-flat">Valider</button>
 	</form>
 {{else}}
 	<img src="/image/valid.png"/>

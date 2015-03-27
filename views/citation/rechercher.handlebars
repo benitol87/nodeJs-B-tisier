@@ -1,37 +1,45 @@
-{{> enTete}}
-{{> menu}}
-<h1> Rechercher une citation</h1>
-
 {{#if enseignants}}
 <form action="#" method="POST">
-	<div>
-		<label for="enseignant">Enseignant : </label>
-		<select name="enseignant">
-			<option value="-1">Tous</option>
-			{{#each enseignants}}
-			<option value="{{this.per_num}}">{{this.per_nom}}</option>
-			{{/each}}
-		</select>
+	<div class="row valign-wrapper">
+		<div class="col s12 m4 l4">
+			<span>Enseignant : </span>
+		</div>
+		<div class="col s12 m8 l8">
+			<select name="enseignant">
+				<option value="-1">Tous</option>
+				{{#each enseignants}}
+				<option value="{{this.per_num}}">{{this.per_nom}}</option>
+				{{/each}}
+			</select>
+		</div>
 	</div>
-	<div>
-		<label for="date">Date : </label>
-		<select name="date">
-			<option value="-1">Toutes</option>
-			{{#each dates}}
-			<option value="{{this.cit_date}}">{{this.cit_date}}</option>
-			{{/each}}
-		</select>
+	<div class="row valign-wrapper">
+		<div class="col s12 m4 l4">
+			<span>Date : </span>
+		</div>
+		<div class="col s12 m8 l8">
+			<select name="date">
+				<option value="-1" selected>Toutes</option>
+				{{#each dates}}
+				<option value="{{this.cit_date}}">{{this.cit_date}}</option>
+				{{/each}}
+			</select>
+		</div>
 	</div>
-	<div>
-		<label for="note">Note : </label>
-		<select name="note">
-			<option value="-1">Toutes</option>
-			{{#each moyennes}}
-			<option value="{{this.moyenne}}">{{this.moyenne}}</option>
-			{{/each}}
-		</select>
+	<div class="row valign-wrapper">
+		<div class="col s12 m4 l4">
+			<span>Note : </span>
+		</div>
+		<div class="col s12 m8 l8">
+			<select name="note">
+				<option value="-1">Toutes</option>
+				{{#each moyennes}}
+				<option value="{{this.moyenne}}">{{this.moyenne}}</option>
+				{{/each}}
+			</select>
+		</div>
 	</div>
-	<input type="submit" value="Rechercher"/>
+	<button type="submit" class="wave-effect wave-light btn">Rechercher</button>
 </form>
 {{else}}
 	{{#if listeCitations}}
@@ -48,7 +56,7 @@
 		<td>{{this.cit_libelle}}</td>
 		<td>{{this.cit_date}}</td>
 		<td>{{this.moyenne}}</td>
-	</tr>	
+	</tr>
 		{{/each}}
 </table>
 	{{else}}

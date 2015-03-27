@@ -1,21 +1,25 @@
-{{> enTete}}
-{{> menu}}
-
-<h1>Ajouter une ville</h1>
-
 {{#if nomVille}}
 
-<img src='/image/valid.png' />
-<span>La ville "<b>{{nomVille}}</b>" a été ajoutée.</span>
+<div class="card blue-grey darken-1">
+    <div class="card-content white-text">
+        <span class="card-title">La ville a été ajoutée</span>
+        <img src='/image/valid.png'/><p>La ville "<b>{{nomVille}}</b>" a été ajoutée.</p>
+    </div>
+    <div class="card-action">
+        <a href="/">Retour à l'accueil</a>
+        <a href="/villes">Voir la liste des villes</a>
+    </div>
+</div>
 
 
 {{else}}
-
 <form action="#" method="post">
-    <label for="ville">Nom :</label>
-    <input id="ville" type="text" name="vil_nom" maxlength="25" placeholder="St-Germain-les-Flots, ..">
+    <div class="input-field">
+        <i class="mdi-social-location-city prefix"></i>
+        <input id='ville' type='text' maxlength="25" name='vil_nom' class="validate" placeholder="Nom de la ville : St-Germain-les-Flots, .." required/>
+    </div>
 
-    <button type="submit">Valider</button>
+    <button type="submit" class="waves-effect waves-light lime darken-1 btn-flat">Valider</button>
 </form>
 
 {{/if}}
