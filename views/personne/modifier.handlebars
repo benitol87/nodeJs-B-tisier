@@ -1,36 +1,75 @@
-{{> enTete}}
-{{> menu}}	
 <h1>Modifier une personne</h1>
 
 <form action="#" method='POST'>
-	<div>
-		<label for='nom'>Nom</label>
-		<input type='text' name='nom' value="{{session.personneModifiee.per_nom}}" required/>
+	<!-- Nom - prénom -->
+	<div class="row valign-wrapper">
+		<div class="col m4 hide-on-small-only valign">
+			<i class="medium mdi-social-person-add"></i>
+		</div>
+		<div class="col s12 m8">
+			<div class="input-field">
+				<label for='nom'>Nom</label>
+				<input type='text' name='nom' class="validate" value="{{session.personneModifiee.per_nom}}" required/>
+			</div>
+			<div class="input-field">
+				<label for='prenom'>Prénom</label>
+				<input type='text' name='prenom' class="validate" value="{{session.personneModifiee.per_prenom}}" required/>
+			</div>
+		</div>
 	</div>
-	<div>
-		<label for='prenom'>Prénom</label>
-		<input type='text' name='prenom' value="{{session.personneModifiee.per_prenom}}" required/>
+
+	<!-- Téléphone - email -->
+	<div class="row">
+		<div class="col s6">
+			<div class="input-field">
+				<i class="mdi-communication-phone prefix"></i>
+				<label for='tel'>Téléphone</label>
+				<input type='text' name='tel' class="validate" maxlength="15" required value="{{session.personneModifiee.per_tel}}"/>
+			</div>
+		</div>
+		<div class="col s6">
+			<div class="input-field">
+            	<i class="mdi-communication-email prefix"></i>
+				<label for='mail'>Mail</label>
+				<input type='text' name='mail' class="validate" value="{{session.personneModifiee.per_mail}}" required/>
+			</div>
+		</div>
 	</div>
-	<div>
-		<label for='tel'>Téléphone</label>
-		<input type='text' name='tel' value="{{session.personneModifiee.per_tel}}" required/>
+	
+	<!-- Login - mot de passe -->
+    <div class="row">
+        <div class="input-field col s6">
+            <i class="mdi-social-person prefix"></i>
+			<input id='login' value="{{session.personneModifiee.per_login}}" type='text' name='login' class="validate" required/>
+			<label for='login'>Nom d'utilisateur</label>
+        </div>
+        <div class="input-field col s6">
+            <i class="mdi-action-verified-user prefix"></i>
+			<input id="pass" type='password' name='password' class="validate" required/>
+            <label for='pass'>Mot de passe</label>
+        </div>
+    </div>
+
+    <!-- Étudiant - personnel -->
+	<div class="row input-field">
+		<div>Catégorie</div>
+		<div class="col s6 offset-s3">
+			<div class="row">
+				<div class="col s12 l4 offset-l2">
+					<p class="center">
+						<input type="radio" name="categorie" value="1" id="radio-etudiant" {{#if session.personneModifiee.dep_num}}checked{{/if}}/>
+						<label for="radio-etudiant">Etudiant</label>
+					</p>
+				</div>
+				<div class="col s12 l4">
+					<p class="center">
+						<input type="radio" name="categorie" value="2" id="radio-personnel" {{#if session.personneModifiee.fon_num}}checked{{/if}}/>
+						<label for="radio-personnel">Personnel</label>
+					</p>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div>
-		<label for='mail'>Mail</label>
-		<input type='text' name='mail' value="{{session.personneModifiee.per_mail}}" required/>
-	</div>
-	<div>
-		<label for='login'>Login</label>
-		<input type='text' name='login' value="{{session.personneModifiee.per_login}}" required/>
-	</div>
-	<div>
-		<label for='password'>Mot de passe</label>
-		<input type='password' name='password' required/>
-	</div>
-	<div>
-		<label for='categorie'>Catégorie </label>
-		<input type="radio" name="categorie" value="1" {{#if session.personneModifiee.dep_num}}checked{{/if}}/>Etudiant
-		<input type="radio" name="categorie" value="2" {{#if session.personneModifiee.fon_num}}checked{{/if}}/>Personnel
-	</div>
-	<input type="submit" value="Valider"/>
+
+	<button type="submit" class="waves-effect waves-light lime darken-1 btn-flat">Valider</button>
 </form>

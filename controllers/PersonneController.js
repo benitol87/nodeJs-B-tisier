@@ -177,7 +177,7 @@ module.exports.AjouterPersonne = function(request, response){
 
 };
 
-
+//////////////////////////////////////////////////////////////// MODIFICATION
 module.exports.ModifierPersonne = function(request, response){
 	// Vérification des droits admin
 	if (!request.session.admin) {
@@ -281,6 +281,7 @@ module.exports.ModifierPersonne = function(request, response){
 		request.session.personneModifiee.dep_num = request.body.dep;
 		request.session.personneModifiee.div_num = request.body.annee;
 
+		// Si le type de personne a changé
 		if(request.session.personneModifiee.typePersonne=="salarié"){
 			// Suppression du salarié
 			model_salarie.deleteSalarie(request.session.personneModifiee, function (err, result){
@@ -303,8 +304,8 @@ module.exports.ModifierPersonne = function(request, response){
 			                return;
 		            	}
 
-						response.message = "Modification effectuée.";
-						home_controller.Index(request, response);
+						response.modifEtudiant = "1";
+						response.render(rootFolder+"finModification", response);
 	            	});
             	});
 
@@ -325,8 +326,8 @@ module.exports.ModifierPersonne = function(request, response){
 	            	}
 	            	delete request.session.personneModifiee;
 
-					response.message = "Modification effectuée.";
-					home_controller.Index(request, response);
+					response.modifEtudiant = "1";
+					response.render(rootFolder+"finModification", response);
 	        	});
         	});
 		}
@@ -360,8 +361,7 @@ module.exports.ModifierPersonne = function(request, response){
 			                return;
 		            	}
 
-						response.message = "Modification effectuée.";
-						home_controller.Index(request, response);
+						response.render(rootFolder+"finModification", response);
 	            	});
             	});
 
@@ -382,8 +382,7 @@ module.exports.ModifierPersonne = function(request, response){
 	            	}
 	            	delete request.session.personneModifiee;
 
-					response.message = "Modification effectuée.";
-					home_controller.Index(request, response);
+					response.render(rootFolder+"finModification", response);
 	        	});
         	});
 		}
@@ -392,6 +391,7 @@ module.exports.ModifierPersonne = function(request, response){
 
 };
 
+///////////////////////////////////////////////////////////////// SUPPRESSION
 module.exports.SupprimerPersonne = function(request, response){
 	if (!request.session.admin) {
         response.message = "Seul un admin peut supprimer une personne.";
@@ -408,8 +408,7 @@ module.exports.SupprimerPersonne = function(request, response){
             return;
         };
 
-        response.message = "Suppression effectuée.";
-		home_controller.Index(request, response);
+        response.render(rootFolder+"finSuppression", response);
     });
 
 };
