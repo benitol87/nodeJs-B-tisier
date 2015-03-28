@@ -9,29 +9,51 @@
 
 
 {{#if personnes}}
-<form method="post" action="#">
-    <label for="personne">Blagueur :</label>
-    <select id="personne" name="per_num">
-        <optgroup label="Personnes">
-            {{#each personnes}}
-                <option value="{{this.per_num}}">{{this.per_nom}} {{this.per_prenom}}</option>
-            {{else}}
-                <p><i>No content</i></p>
-            {{/each}}
-        </optgroup>
-    </select>
+<div class="container">
+    <form method="post" action="#">
+        <!-- Blagueur -->
+        <div class="row valign-wrapper">
+            <div class="col s12 m4 l2">
+                <span>Blagueur :</span>
+            </div>
+            <div class="col s12 m8 l10">
+                <select name="per_num">
+                    {{#each personnes}}
+                        <option value="{{this.per_num}}">{{this.per_nom}} {{this.per_prenom}}</option>
+                    {{else}}
+                        <p><i>No content</i></p>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
 
-    <label for="date">Date citation :</label>
-    <input type="text" maxlength="10" name="cit_date" id="date" required>
+        <!-- Date -->
+        <div class="row valign-wrapper">
+            <div class="col s12">
+                <div class="input-field">
+                    <i class="mdi-action-today prefix"></i>
+                    <label for="date">Date d'ajout</label>
+                    <input type="text" maxlength="10" name="cit_date" id="date" required>
+                </div>
+            </div>
+        </div>
 
-    <label for="citation">Citation :</label>
-    <textarea id="citation" name="cit_libelle" rows="3" cols="30" required></textarea>
+        <!-- Citation -->
+        <div class="row valign-wrapper">
+            <div class="col s12">
+                <div class="input-field center">
+                    <textarea id="citation" name="cit_libelle" class="materialize-textarea" rows="3" cols="30" required></textarea>
+                    <label for="citation">La petite blague</label>
+                </div>
+            </div>
+        </div>
 
-    <button type="submit">Valider</button>
+        <button type="submit" class="waves-effect waves-light green ligthen-2 btn">Valider</button>
 
-    <ul id="mot_interdits" class="list-unstyled">
-    </ul>
-</form>
+        <ul id="mot_interdits" class="list-unstyled">
+        </ul>
+    </form>
+</div>
 
 <script type="text/javascript">
     $(document).ready(function() {

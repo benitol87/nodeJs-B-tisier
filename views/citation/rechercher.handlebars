@@ -1,10 +1,10 @@
 {{#if enseignants}}
 <form action="#" method="POST">
 	<div class="row valign-wrapper">
-		<div class="col s12 m4 l4">
+		<div class="col s12 m4 l3">
 			<span>Enseignant : </span>
 		</div>
-		<div class="col s12 m8 l8">
+		<div class="col s12 m8 l9">
 			<select name="enseignant">
 				<option value="-1">Tous</option>
 				{{#each enseignants}}
@@ -14,10 +14,10 @@
 		</div>
 	</div>
 	<div class="row valign-wrapper">
-		<div class="col s12 m4 l4">
+		<div class="col s12 m4 l3">
 			<span>Date : </span>
 		</div>
-		<div class="col s12 m8 l8">
+		<div class="col s12 m8 l9">
 			<select name="date">
 				<option value="-1" selected>Toutes</option>
 				{{#each dates}}
@@ -27,10 +27,10 @@
 		</div>
 	</div>
 	<div class="row valign-wrapper">
-		<div class="col s12 m4 l4">
+		<div class="col s12 m4 l3">
 			<span>Note : </span>
 		</div>
-		<div class="col s12 m8 l8">
+		<div class="col s12 m8 l9">
 			<select name="note">
 				<option value="-1">Toutes</option>
 				{{#each moyennes}}
@@ -39,27 +39,54 @@
 			</select>
 		</div>
 	</div>
-	<button type="submit" class="wave-effect wave-light btn">Rechercher</button>
+	<button type="submit" class="waves-effect waves-light green btn">Rechercher</button>
 </form>
 {{else}}
 	{{#if listeCitations}}
-<table>
-	<tr>
-		<th>Enseignant</th>
-		<th>Libellé</th>
-		<th>Date</th>
-		<th>Note</th>
-	</tr>
-		{{#each listeCitations}}
-	<tr>
-		<td>{{this.per_nom}}</td>
-		<td>{{this.cit_libelle}}</td>
-		<td>{{this.cit_date}}</td>
-		<td>{{this.moyenne}}</td>
-	</tr>
-		{{/each}}
-</table>
+		<table class="table striped bordered centered">
+			<thead>
+				<tr>
+					<th>Enseignant</th>
+					<th>Libellé</th>
+					<th>Date</th>
+					<th>Note</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{{#each listeCitations}}
+				<tr>
+					<td>{{this.per_nom}}</td>
+					<td>{{this.cit_libelle}}</td>
+					<td>{{this.cit_date}}</td>
+					<td>{{this.moyenne}}</td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
 	{{else}}
-	Pas de résultats :(
+		<div class="card-panel green lighten-2">
+			<h5>Pas de résultats :(</h5>
+		</div>
+
+		<table class="table striped bordered centered">
+			<thead>
+				<tr>
+					<th>Enseignant</th>
+					<th>Libellé</th>
+					<th>Date</th>
+					<th>Note</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr>
+					<td> - </td>
+					<td> - </td>
+					<td> - </td>
+					<td> - </td>
+				</tr>
+			</tbody>
+		</table>
 	{{/if}}
 {{/if}}

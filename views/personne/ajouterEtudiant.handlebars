@@ -19,6 +19,16 @@
 		<button type="submit" class="waves-effect waves-light cyan lighten-3 btn-flat">Valider</button>
 	</form>
 {{else}}
-	<img src="/image/valid.png"/>
-	<span>L'étudiant a été ajouté !</span>
+
+<div class="card blue-grey darken-1">
+    <div class="card-content white-text">
+        <span class="card-title">Ajout effectué</span>
+        <img src='/image/valid.png'/><p>L'étudiant a été ajouté.</p>
+    </div>
+    <div class="card-action">
+        <a href="/">Retour à l'accueil</a>
+        <a href="/personne/lister">Voir la liste des personnes</a>
+    </div>
+</div>
+
 {{/if}}
